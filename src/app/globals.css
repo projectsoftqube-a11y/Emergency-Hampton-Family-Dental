@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+@theme {
+  /* ─── Brand system - Hampton Family Dental ───
+     Carried over verbatim from the main hamptonfamilydentist.com theme so this
+     landing page is visually identical to the parent site. Derived from the
+     logo: deep petrol #143C50 (wordmark) and soft steel-blue #788CB4 (tooth
+     mark). Petrol carries interaction, steel carries decoration.
+
+     If the main site's palette ever changes, mirror the change here. */
+
+  /* Primary - petrol/teal: buttons, links, active states, accents */
+  --color-primary: #1E6076;        /* mid petrol - AA on white (~6.4:1) */
+  --color-primary-dark: #143C50;   /* logo deep petrol - hover / pressed */
+  --color-primary-light: #3B8299;  /* lighter petrol - subtle fills, focus rings */
+  --color-primary-glow: rgba(30, 96, 118, 0.3);
+
+  /* Navy / ink - headings, body copy, dark surfaces (petrol family) */
+  --color-navy: #143C50;
+  --color-navy-dark: #0D2A38;      /* deepest petrol - footer / dark sections */
+  --color-navy-light: #2B586C;
+
+  /* Steel - secondary & decorative (the logo's tooth blue) */
+  --color-steel: #788CB4;
+  --color-steel-light: #A9B7D2;
+  --color-steel-dark: #5C7098;
+
+  /* Accent - fresh medical teal-green. NEW on this landing page; the parent
+     site has no accent colour because it never needed one. Reads as "go /
+     healthy" rather than alarm, and sits cleanly beside petrol on the light
+     surfaces. Passes AA with white text at 14px+. Token names stay
+     "urgent-*" so every existing call site keeps working. */
+  --color-urgent: #0F8A6D;
+  --color-urgent-dark: #0B6D56;
+  --color-urgent-light: #17B08B;
+  --color-urgent-soft: #ECF9F5;
+
+  /* Emergency - true alert red. Reserved for genuine urgency ONLY: the
+     "Emergency Dentist" badge, severe-symptom warnings, the go-to-the-ER
+     escalation in the first-aid block, and the live status dot.
+
+     The distinction matters. Teal above is the page's accent and carries
+     every ordinary CTA; if red were used for those too it would lose all
+     signalling value by the third scroll. Red here always means "this one
+     is actually an emergency". */
+  --color-emergency: #D93025;
+  --color-emergency-dark: #B3261E;
+  --color-emergency-light: #F1544A;
+  --color-emergency-soft: #FDECEA;
+
+  /* Neutrals - cool mist */
+  --color-beige: #DDE4EC;          /* soft cool surface / divider */
+  --color-beige-light: #F2F5F9;    /* near-white cool wash - section backgrounds */
+  --color-beige-dark: #C4CDDA;     /* deeper cool neutral / borders */
+  --color-white: #ffffff;
+
+  /* Fraunces for headings, Inter for everything else - see src/app/layout.tsx
+     for why this page departs from the main site's Playfair/Poppins pairing. */
+  --font-heading: var(--font-heading-family), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-body-family), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Fallback for when Lenis is not driving: reduced-motion users, and the
+       moment before the script mounts. */
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ─── Lenis ───
+     Written out rather than importing lenis/dist/lenis.css, because that
+     stylesheet ships `.lenis.lenis-smooth iframe { pointer-events: none }` —
+     which would make the Google Maps embed in the location section completely
+     dead to clicks, panning and zooming. The map is marked
+     [data-lenis-prevent] instead, so Lenis leaves scrolling inside it alone
+     while the map stays fully interactive.
+
+     See src/components/SmoothScroll.tsx. Lenis puts .lenis on <html> only once
+     it has actually started, so everything below is inert for anyone on
+     prefers-reduced-motion. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  /* Native smooth scrolling fights Lenis's own easing and produces a
+     double-eased lurch on anchor clicks. Hand over once Lenis is live. */
+  html.lenis {
+    scroll-behavior: auto;
+  }
+
+  .lenis:not(.lenis-autoToggle).lenis-stopped {
+    overflow: clip;
+  }
+
+  .lenis [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-navy);
+    background-color: var(--color-white);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  /* Tailwind v4 dropped the default cursor:pointer on buttons. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  label[for],
+  summary,
+  select {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  /* Respect the OS "reduce motion" setting. A page shown to people in pain
+     should not insist on animating at them. */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ─── Review marquee ───
+   The track renders its cards twice and shifts by exactly half its own width,
+   so the second copy lands precisely where the first began and the loop has no
+   visible seam. Driven by CSS rather than JS so it runs on the compositor and
+   costs nothing per frame - see the note in Reviews.tsx.
+
+   translate3d (not translateX) to keep the track on its own GPU layer; the
+   motion-safe: prefix on the utility already handles reduced-motion. */
+@keyframes lp-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ─── Thin, on-theme scrollbars ─── */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 60, 80, 0.35) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(20, 60, 80, 0.25);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
