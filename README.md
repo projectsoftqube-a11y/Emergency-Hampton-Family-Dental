@@ -165,6 +165,7 @@ Every CTA carries a `data-cta` attribute, so GTM needs one trigger rather than f
 | `data-cta` | Where |
 |---|---|
 | `header-call` | Sticky header |
+| `header-logo` / `footer-logo` | Logo links to the campaign root (`LOGO_HREF` in `lp.config.ts`, derived from `NEXT_PUBLIC_SITE_URL`) |
 | `hero-call` / `hero-text` | Hero buttons |
 | `form-inline-call` | Phone link inside the form card |
 | `form-submit` | Form submit |

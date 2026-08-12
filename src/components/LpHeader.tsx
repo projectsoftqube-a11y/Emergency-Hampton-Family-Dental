@@ -17,14 +17,12 @@ export default function LpHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-beige/80 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-3 py-2.5 sm:px-6 sm:py-3">
-        {/* Brand - links to the main practice site, in a new tab so this page
-            and any part-filled form survive the click. */}
+        {/* Brand - links to this campaign's own root. Same tab: it is a
+            self-link, so a new tab would just duplicate the current page. */}
         <a
           href={LOGO_HREF}
-          target="_blank"
-          rel="noopener noreferrer"
           data-cta="header-logo"
-          aria-label={`${PRACTICE.name} - visit the main website (opens in a new tab)`}
+          aria-label={`${PRACTICE.name} - emergency dentist in ${PRACTICE.city}, ${PRACTICE.state}`}
           className="flex min-w-0 items-center rounded-md transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
         >
           <Image

@@ -45,8 +45,8 @@ export default function LpFooter({ year }: { year: number }) {
         className="relative mx-auto w-full max-w-2xl"
       >
         {/* Same reasoning as the header: the wordmark carries the name, and its
-            petrol lettering needs a light surface to read against. Links to the
-            main practice site in a new tab, so the landing page survives. */}
+            petrol lettering needs a light surface to read against. Links to
+            this campaign's own root, in the same tab. */}
         <motion.a
           variants={{
             hidden: { opacity: 0, y: 16 },
@@ -54,10 +54,8 @@ export default function LpFooter({ year }: { year: number }) {
           }}
           transition={{ duration: 0.5, ease: EASE }}
           href={LOGO_HREF}
-          target="_blank"
-          rel="noopener noreferrer"
           data-cta="footer-logo"
-          aria-label={`${PRACTICE.name} - visit the main website (opens in a new tab)`}
+          aria-label={`${PRACTICE.name} - emergency dentist in ${PRACTICE.city}, ${PRACTICE.state}`}
           className="mx-auto mb-6 inline-flex rounded-xl bg-white px-4 py-2.5 transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
           <Image

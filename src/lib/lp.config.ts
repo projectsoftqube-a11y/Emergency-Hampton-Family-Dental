@@ -4,23 +4,33 @@
  * components, so a copy tweak never requires touching JSX.
  */
 
+import { SITE_URL } from "@/lib/site";
+
 export const PHONE_DISPLAY = "(215) 357-2224";
 export const PHONE_TEL = "tel:+12153572224";
 export const PHONE_SMS = "sms:+12153572224";
 
 /**
- * Where the header and footer logos link to.
+ * Where the header and footer logos link to: this campaign's own root, i.e.
+ * https://emergency.hamptonfamilydentist.com.
  *
- * The landing page has no "home" of its own, so this points at the main
- * practice site. It opens in a new tab on purpose: this page is bought traffic
- * with a single conversion goal, and sending someone in pain away from the form
- * in the same tab loses the lead. The new tab leaves the landing page sitting
- * exactly where they left it.
+ * Deliberately derived from SITE_URL rather than written out a second time.
+ * Both values are "the address this landing page is deployed at", and keeping
+ * two copies of that guarantees they drift the first time the campaign moves
+ * to a different subdomain or gets reviewed on a Vercel preview URL. Change
+ * NEXT_PUBLIC_SITE_URL and the logo follows.
  *
- * To make it a same-tab link instead, drop the target/rel pair in LpHeader.tsx
- * and LpFooter.tsx. To remove the link entirely, set this to "".
+ * This is a same-origin self-link, so it opens in the same tab — the earlier
+ * new-tab behaviour was there because the logo pointed off to the main
+ * practice site, which was an exit path. Pointing at itself, a new tab would
+ * just duplicate the page the visitor is already on.
+ *
+ * To point it back at the main practice site, set this to
+ * "https://hamptonfamilydentist.com" and restore target="_blank" +
+ * rel="noopener noreferrer" in LpHeader.tsx and LpFooter.tsx. To remove the
+ * link entirely, set this to "".
  */
-export const LOGO_HREF = "https://hamptonfamilydentist.com";
+export const LOGO_HREF = SITE_URL;
 
 export const PRACTICE = {
   name: "Hampton Family Dental",
