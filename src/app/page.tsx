@@ -8,7 +8,6 @@ import InsuranceAndFinancing from "@/components/InsuranceAndFinancing";
 import ProcessSteps from "@/components/ProcessSteps";
 import MeetTheDentists from "@/components/MeetTheDentists";
 import Reviews from "@/components/Reviews";
-import BeforeAfter from "@/components/BeforeAfter";
 import FirstAid from "@/components/FirstAid";
 import Faq from "@/components/Faq";
 import LocationBlock from "@/components/LocationBlock";
@@ -25,7 +24,7 @@ export const metadata: Metadata = {
   title:
     "Emergency Dentist Southampton PA | Get Out of Tooth Pain Today - Hampton Family Dental",
   description:
-    "Same-day emergency dentist in Southampton, PA. Fast relief for toothaches, broken teeth and swelling. Exam + X-rays from $59. Most insurance accepted. Call (215) 357-2224.",
+    "Same-day emergency dentist in Southampton, PA. Fast relief for toothaches, broken teeth and swelling. Exam + X-rays $59 for patients with no insurance. Most PPO insurances accepted. Call (215) 357-2224.",
   alternates: { canonical: absoluteUrl("/") },
   // A paid-traffic landing page should not compete in organic search with the
   // main site's /general-dentistry/emergency-dentistry service page. It stays
@@ -37,13 +36,13 @@ export const metadata: Metadata = {
     url: absoluteUrl("/"),
     title: "Emergency Dentist in Southampton, PA - Seen Today",
     description:
-      "Get out of tooth pain today. Same-day emergency appointments, exam + X-rays from $59, most insurance accepted.",
+      "Get out of tooth pain today. Same-day emergency appointments, exam + X-rays $59 for patients with no insurance, most PPO insurances accepted.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Emergency Dentist in Southampton, PA - Seen Today",
     description:
-      "Get out of tooth pain today. Same-day emergency appointments, exam + X-rays from $59.",
+      "Get out of tooth pain today. Same-day emergency appointments, exam + X-rays $59 for patients with no insurance.",
   },
 };
 
@@ -52,8 +51,10 @@ export const metadata: Metadata = {
  *
  * Deliberately omitted until the office confirms them:
  *  · aggregateRating - an unverifiable rating in schema risks a manual action.
- *  · openingHoursSpecification for Wed/Fri–Sun - those are [CONFIRM] in the copy.
- * Both are listed in README.md under "Before launch".
+ * Fri/Sat/Sun are closed, so they are simply absent from
+ * openingHoursSpecification - schema.org treats an omitted day as closed, and
+ * an explicit "closed" entry is not a thing.
+ * The rating omission is listed in README.md under "Before launch".
  */
 const dentistSchema = {
   "@context": "https://schema.org",
@@ -98,6 +99,12 @@ const dentistSchema = {
       dayOfWeek: "Tuesday",
       opens: "09:00",
       closes: "18:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Wednesday",
+      opens: "08:00",
+      closes: "14:00",
     },
     {
       "@type": "OpeningHoursSpecification",
@@ -152,7 +159,6 @@ export default function EmergencyDentistLandingPage() {
         <ProcessSteps />
         <MeetTheDentists />
         <Reviews />
-        <BeforeAfter />
         <FirstAid />
         <Faq />
         <LocationBlock />

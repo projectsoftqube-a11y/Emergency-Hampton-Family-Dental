@@ -16,15 +16,24 @@ const DENTISTS = [
     alt: "Dr. Jeffrey Brenner, general and restorative dentist at Hampton Family Dental in Southampton, PA",
     // Real photo, supplied by the practice.
     standIn: false,
+    // Real portraits sit high in frame, so the crop pulls up towards the face.
+    objectPosition: "center 20%",
   },
   {
     name: "Dr. Keyur Dudhat",
     bio: "Gentle, patient-first care for emergencies and everyday dentistry.",
-    file: "lp/dr-keyur-dudhat.webp",
-    // Sourced from the practice's own main site - this is the real dentist.
-    src: "/images/lp/dr-keyur-dudhat.webp",
+    file: "lp/dentist-placeholder.svg",
+    /*
+      Generic outline avatar at the office's request - they have not signed off
+      a portrait for Dr. Dudhat yet. Swap `src` back to a real photo (and drop
+      the objectPosition override below, which only exists to centre the
+      drawing) once one is supplied.
+    */
+    src: "/images/lp/dentist-placeholder.svg",
     alt: "Dr. Keyur Dudhat, emergency and general dentist at Hampton Family Dental in Southampton, PA",
     standIn: false,
+    // The drawing is already centred in its own square - no crop needed.
+    objectPosition: "center",
   },
 ];
 
@@ -77,7 +86,7 @@ export default function MeetTheDentists() {
                   */
                   sizes="(max-width: 640px) 160px, 192px"
                   quality={90}
-                  objectPosition="center 20%"
+                  objectPosition={dentist.objectPosition}
                 />
                 {dentist.standIn && (
                   <span className="absolute -bottom-1 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-amber-400/95 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-amber-950 shadow-sm">
@@ -100,8 +109,9 @@ export default function MeetTheDentists() {
       </div>
 
       <ReviewNote>
-        [CONFIRM] Dentist bios with the office. Both portraits are the real
-        dentists.
+        [CONFIRM] Dentist bios with the office. Dr. Brenner&apos;s portrait is the
+        real one from the main site; Dr. Dudhat is showing a generic outline
+        avatar until the office supplies a photo.
       </ReviewNote>
     </Section>
   );

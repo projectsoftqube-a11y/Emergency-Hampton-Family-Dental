@@ -16,7 +16,7 @@ const FIELDS = [
   { key: "name", label: "Your name", type: "text", autoComplete: "name" },
   {
     key: "phone",
-    label: "Best phone number",
+    label: "Phone Number",
     type: "tel",
     autoComplete: "tel",
     inputMode: "tel" as const,
@@ -139,7 +139,7 @@ export default function LeadForm({ compact = false }: { compact?: boolean }) {
           Request a same-day visit
         </h3>
         <p className="mt-1.5 text-[13px] leading-snug text-navy/55">
-          In real pain? Calling is fastest -{" "}
+          Call us at{" "}
           <a
             href={PHONE_TEL}
             data-cta="form-inline-call"
@@ -243,7 +243,7 @@ export default function LeadForm({ compact = false }: { compact?: boolean }) {
             </>
           ) : (
             <>
-              Get me an appointment
+              Send my appointment request
               <ArrowRight
                 className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5"
                 strokeWidth={2.6} aria-hidden />

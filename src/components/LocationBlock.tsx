@@ -1,10 +1,9 @@
 "use client";
 
 import { Clock, MapPin, Navigation } from "lucide-react";
-import ReviewNote from "./ReviewNote";
 import { Reveal, Section, SectionHeading } from "./Section";
 import { HOURS } from "@/lib/content";
-import { PRACTICE, SHOW_REVIEW_NOTES } from "@/lib/lp.config";
+import { PRACTICE } from "@/lib/lp.config";
 
 export default function LocationBlock() {
   return (
@@ -21,8 +20,11 @@ export default function LocationBlock() {
       <div className="mt-8 grid gap-4 lg:grid-cols-[1.15fr_0.85fr] lg:gap-6">
         {/* Map */}
         <Reveal className="min-w-0 lg:h-full">
-          {/* Live Google Maps embed - no API key needed for the /maps/embed
-              endpoint, and lazy-loaded so it never blocks LCP.
+          {/* Live Google Maps embed of the practice's own Business Profile
+              (supplied by the office), so the pin carries the "Hampton Family
+              Dental" name rather than resolving a bare street address. No API
+              key needed for the /maps/embed endpoint, and lazy-loaded so it
+              never blocks LCP.
 
               A fixed aspect ratio on mobile, but on lg+ the height is handed
               over to the grid so it matches the card beside it exactly. */}
@@ -34,9 +36,10 @@ export default function LocationBlock() {
           >
             <iframe
               title="Map showing Hampton Family Dental at 283 Second Street Pike, Suite 140, Southampton, PA 18966"
-              src="https://www.google.com/maps?q=283+Second+Street+Pike,+Suite+140,+Southampton,+PA+18966&output=embed"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1115.386714131822!2d-75.04622525048282!3d40.164562049177654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c6ade9ce4d621f%3A0x3f9abf9e93dba17b!2sHampton%20Family%20Dental!5e1!3m2!1sen!2sin!4v1786532574944!5m2!1sen!2sin"
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
               className="absolute inset-0 h-full w-full border-0"
             />
           </div>
@@ -88,28 +91,13 @@ export default function LocationBlock() {
                     <dt className="min-w-0 shrink-0 text-[13px] font-medium text-navy/70">
                       {row.day}
                     </dt>
-                    <dd
-                      // Amber here was review-note styling. With the notes off,
-                      // "Call for hours" is real public copy, so it takes the
-                      // page's own muted tone rather than flagging itself.
-                      className={`min-w-0 text-right text-[13px] tabular-nums ${
-                        row.confirm
-                          ? "font-medium text-navy/60"
-                          : "font-semibold text-navy"
-                      }`}
-                    >
-                      {row.confirm && !SHOW_REVIEW_NOTES ? "Call for hours" : row.time}
+                    <dd className="min-w-0 text-right text-[13px] font-semibold tabular-nums text-navy">
+                      {row.time}
                     </dd>
                   </div>
                 ))}
               </dl>
 
-              <ReviewNote>
-                [CONFIRM] Wednesday and Fri–Sun hours with the office. Until they
-                are confirmed the schema below omits those days rather than
-                guessing - wrong hours in structured data send emergency patients
-                to a locked door.
-              </ReviewNote>
             </div>
           </div>
         </Reveal>

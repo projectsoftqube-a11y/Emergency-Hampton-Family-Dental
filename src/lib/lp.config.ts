@@ -46,7 +46,7 @@ export const PRACTICE = {
 } as const;
 
 /**
- * Insurance carriers shown in the "Most insurance welcome" strip.
+ * Insurance carriers shown in the "PPO Insurances Accepted" strip.
  *
  * `slug` is also the filename the logo auto-detector looks for in
  * public/images/lp/insurance/ - e.g. `delta-dental.webp`. See
@@ -64,7 +64,6 @@ export type Carrier = {
 };
 
 export const CARRIERS: Carrier[] = [
-  { name: "Delta Dental", slug: "delta-dental" },
   { name: "Cigna", slug: "cigna" },
   { name: "Aetna", slug: "aetna" },
   { name: "MetLife", slug: "metlife" },

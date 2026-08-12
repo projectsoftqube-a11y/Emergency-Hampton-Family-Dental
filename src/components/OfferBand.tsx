@@ -40,7 +40,7 @@ export default function OfferBand() {
 
           <span className="mx-auto inline-flex max-w-full items-center gap-1.5 rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-white/80 sm:text-[10.5px] sm:tracking-[0.2em] sm:backdrop-blur-sm">
             <ShieldCheck className="h-3 w-3 shrink-0" strokeWidth={2.4} aria-hidden />
-            No surprise bills
+            No insurance, no problem!
           </span>
 
           <p
@@ -51,14 +51,16 @@ export default function OfferBand() {
               letterSpacing: "-0.03em",
             }}
           >
-            Exam + X-rays from{" "}
-            <span className="whitespace-nowrap text-urgent-light">$59*</span>
+            Emergency exam + X-rays special at{" "}
+            <span className="whitespace-nowrap text-urgent-light">$59</span>{" "}
+            for patients with no insurance
           </p>
 
           <p className="mx-auto mt-4 max-w-xl text-[14px] leading-relaxed text-white/65 sm:text-[15.5px]">
-            No surprise bills. We show you exactly what&apos;s wrong and what each
-            option costs <strong className="font-semibold text-white">before</strong>{" "}
-            we do anything - you decide.
+            Take advantage of our $59 emergency exam special for patients with no
+            insurance. We show you exactly what&apos;s wrong and what each option
+            costs <strong className="font-semibold text-white">before</strong> we do
+            anything - you decide.
           </p>
 
           <a

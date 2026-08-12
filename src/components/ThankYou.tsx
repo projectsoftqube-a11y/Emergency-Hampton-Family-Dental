@@ -43,7 +43,7 @@ const NEXT_STEPS: { icon: LucideIcon; time: string; title: string; body: string 
     icon: Stethoscope,
     time: "At your visit",
     title: "We find the real cause",
-    body: "Exam + digital X-rays from $59.* We explain what's wrong, and what it costs, before we treat it.",
+    body: "Exam + digital X-rays $59 for patients with no insurance. We explain what's wrong, and what it costs, before we treat it.",
   },
 ];
 
@@ -117,10 +117,6 @@ function useFirstName(): string {
 
 export default function ThankYou() {
   const firstName = forDisplay(useFirstName());
-
-  /** Days still marked [CONFIRM] in content.ts are omitted, not guessed -
-      the same rule the JSON-LD opening hours follow on the landing page. */
-  const confirmedHours = HOURS.filter((h) => !h.confirm);
 
   return (
     <>
@@ -411,7 +407,7 @@ export default function ThankYou() {
               </div>
 
               <dl className="mt-3 space-y-1.5">
-                {confirmedHours.map((h) => (
+                {HOURS.map((h) => (
                   <div
                     key={h.day}
                     className="flex min-w-0 items-baseline justify-between gap-3 border-b border-beige-dark/40 pb-1.5 last:border-0"

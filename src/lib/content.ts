@@ -41,7 +41,7 @@ export const FAQS: AccordionItem[] = [
   },
   {
     q: "What will it cost?",
-    a: "Your exam + digital X-rays start at $59.* We always explain the cost of any treatment before we do it.",
+    a: "Your exam + digital X-rays start at $59 for patients with no insurance. We always explain the cost of any treatment before we do it.",
   },
   {
     q: "Do I have to be an existing patient?",
@@ -57,10 +57,16 @@ export const FAQS: AccordionItem[] = [
   },
 ];
 
-export const HOURS: { day: string; time: string; confirm?: boolean }[] = [
+/**
+ * Confirmed with the office - every day now has a real value, so there is no
+ * longer a `confirm` flag or a "Call for hours" fallback anywhere.
+ */
+export const HOURS: { day: string; time: string }[] = [
   { day: "Monday", time: "9 AM – 5 PM" },
   { day: "Tuesday", time: "9 AM – 6 PM" },
-  { day: "Wednesday", time: "[CONFIRM 8–12 or 9–1]", confirm: true },
+  { day: "Wednesday", time: "8 AM – 2 PM" },
   { day: "Thursday", time: "8 AM – 5 PM" },
-  { day: "Fri – Sun", time: "[CONFIRM: closed?]", confirm: true },
+  { day: "Friday", time: "Closed" },
+  { day: "Saturday", time: "Closed" },
+  { day: "Sunday", time: "Closed" },
 ];

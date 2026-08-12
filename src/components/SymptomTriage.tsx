@@ -77,8 +77,8 @@ export default function SymptomTriage({
     <Section id="symptoms" className="bg-beige-light">
       <SectionHeading
         eyebrow="Start here"
-        title="Whatever's hurting, we can help"
-        lead="Tap the one that sounds like you - or just call and tell us."
+        title="What's Hurting?"
+        lead="Give us a call for same-day treatment on any of the following below."
       />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">

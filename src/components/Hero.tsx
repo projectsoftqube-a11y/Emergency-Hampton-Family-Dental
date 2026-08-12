@@ -12,8 +12,8 @@ import { PHONE_DISPLAY, PHONE_SMS, PHONE_TEL } from "@/lib/lp.config";
  */
 const CHIPS = [
   "Seen today - same-day relief",
-  "Most insurance accepted",
-  "Emergency exam + X-rays from $59*",
+  "Most PPO insurances accepted",
+  "Emergency exam + X-rays special at $59 for patients with no insurance",
   "Gentle, no-judgment care",
 ];
 

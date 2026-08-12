@@ -22,7 +22,7 @@ const STEPS = [
   },
   {
     time: "Today",
-    title: "You go home out of pain",
+    title: "You go home with no pain",
     body: "We treat it, or get you comfortable until we can finish it properly.",
   },
 ];

@@ -2,25 +2,24 @@
 
 import Image from "next/image";
 import { Check, CreditCard, HeartHandshake, Phone, ShieldCheck } from "lucide-react";
-import ReviewNote from "./ReviewNote";
 import { Reveal, Section, SectionHeading } from "./Section";
 import { CARRIERS, PHONE_DISPLAY, PHONE_TEL, type Carrier } from "@/lib/lp.config";
 
 const FINANCING = [
   {
     icon: ShieldCheck,
-    title: "Most insurance accepted",
+    title: "Most PPO insurances accepted",
     body: "We bill your plan directly, so you pay less out of pocket.",
   },
   {
     icon: HeartHandshake,
-    title: "No insurance? Membership plan",
-    body: "Exam, X-rays & cleaning plus member pricing on treatment - from $[X]/month.",
+    title: "No insurance, No Problem!",
+    body: "Get our in-office membership plan.",
   },
   {
     icon: CreditCard,
-    title: "Flexible payment plans",
-    body: "Ask about financing so an emergency doesn't have to wait for payday.",
+    title: "Ask about our Financing plans",
+    body: "Financing options so an emergency doesn't have to wait for payday.",
   },
 ];
 
@@ -40,8 +39,8 @@ export default function InsuranceAndFinancing({
       {/* ── Insurance ── */}
       <SectionHeading
         eyebrow="Cost & coverage"
-        title="Most insurance welcome"
-        lead="Bring your card - we'll check your coverage for you before anything's decided."
+        title="PPO Insurances Accepted"
+        lead="Email us a picture of your insurance card at info@hamptonfamilydentist.com and we will get your insurance verified!"
       />
 
       {/*
@@ -56,9 +55,10 @@ export default function InsuranceAndFinancing({
         matter how many carriers the office adds or which ones have artwork.
       */}
       <Reveal delay={0.05}>
-        {/* 3 columns, not 4. Six carriers divide evenly into three, so the
-            grid always closes as two full rows - at four columns the seventh
-            cell stranded a gap on the second row. */}
+        {/* 3 columns, not 4. Delta Dental's removal left five carriers, which
+            would strand a hole in the second row - so the "Don't see your
+            plan?" card takes that sixth cell (below) and the grid closes as
+            two full rows again. */}
         <ul className="mt-7 grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3">
           {carriers.map((carrier) => (
             <li
@@ -88,48 +88,57 @@ export default function InsuranceAndFinancing({
             </li>
           ))}
 
+          {/*
+            "Don't see your plan?" as the sixth cell.
+
+            Five carriers in a three-column grid strand a hole in the second
+            row. This card fills it, so the block closes as two clean rows -
+            and it lands exactly where someone who has just failed to find
+            their insurer is looking.
+
+            Same height and radius as a carrier tile so the grid stays even,
+            but a dashed primary border and tinted fill so it reads as an
+            action rather than a logo that failed to load. Someone whose plan
+            is missing is the most likely to bounce, so it is a real tel: link.
+          */}
+          <li className="min-w-0">
+            <a
+              href={PHONE_TEL}
+              data-cta="insurance-not-listed"
+              className="group flex h-[72px] min-w-0 flex-col items-center justify-center gap-0.5 rounded-2xl border border-dashed border-primary/40 bg-primary/[0.05] px-3 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-solid hover:border-primary/50 hover:bg-white hover:shadow-[0_12px_28px_-16px_rgba(20,60,80,0.45)] sm:h-[80px] sm:px-4"
+            >
+              <span className="flex min-w-0 items-center gap-1.5">
+                <Phone
+                  className="h-3.5 w-3.5 shrink-0 text-primary"
+                  strokeWidth={2.6}
+                  aria-hidden
+                />
+                <span className="min-w-0 text-[12.5px] font-bold leading-tight text-navy sm:text-[13.5px]">
+                  Don&apos;t see your plan?
+                </span>
+              </span>
+              <span className="text-[11.5px] font-semibold leading-tight text-primary sm:text-[12.5px]">
+                + many more PPO insurances
+              </span>
+            </a>
+          </li>
         </ul>
       </Reveal>
 
-      {/*
-        "Don't see your plan?" - a full-width bar under the grid, not a cell
-        inside it.
-
-        Two problems with it as a grid cell: seven cells never fill a row
-        cleanly, so it left a visible hole; and it is not a carrier, so giving
-        it the same shape as one made it read as a logo that had failed to
-        load. Pulled out and widened, it becomes the closing line of the block
-        and can carry the phone number itself.
-
-        Someone whose insurer is missing from this grid is exactly the person
-        most likely to bounce, so this is a real tel: link rather than the
-        inert "+ more - just ask" text it replaces.
-      */}
+      {/* The grid card above is intentionally compact, so the phone number
+          itself sits here where there is room to read it. */}
       <Reveal delay={0.12}>
-        <a
-          href={PHONE_TEL}
-          data-cta="insurance-not-listed"
-          className="group mt-3 flex min-w-0 flex-col items-center justify-between gap-3 rounded-2xl border border-dashed border-primary/40 bg-primary/[0.04] px-5 py-4 text-center transition-all duration-300 hover:border-solid hover:border-primary/50 hover:bg-white hover:shadow-[0_14px_32px_-20px_rgba(20,60,80,0.5)] sm:flex-row sm:text-left"
-        >
-          <span className="flex min-w-0 items-center gap-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
-              <Phone className="h-4 w-4" strokeWidth={2.5} aria-hidden />
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[14px] font-bold leading-tight text-navy sm:text-[15px]">
-                Don&apos;t see your plan?
-              </span>
-              <span className="mt-0.5 block text-[12.5px] leading-tight text-navy/60">
-                We accept more than the plans listed here - call and
-                we&apos;ll check your coverage in a minute.
-              </span>
-            </span>
-          </span>
-
-          <span className="shrink-0 whitespace-nowrap text-[14px] font-bold text-primary sm:text-[15px]">
+        <p className="mt-3 text-center text-[13px] leading-snug text-navy/60 sm:text-[13.5px]">
+          Call{" "}
+          <a
+            href={PHONE_TEL}
+            data-cta="insurance-not-listed-number"
+            className="font-bold text-primary underline decoration-primary/30 underline-offset-2 transition-colors hover:decoration-primary"
+          >
             {PHONE_DISPLAY}
-          </span>
-        </a>
+          </a>{" "}
+          and we&apos;ll check your coverage in a minute.
+        </p>
       </Reveal>
 
       {/*
@@ -185,11 +194,6 @@ export default function InsuranceAndFinancing({
             </div>
           </div>
         </Reveal>
-
-        <ReviewNote>
-          [CONFIRM] Membership price and financing options with the office -
-          replace the $[X]/month placeholder before this page takes paid traffic.
-        </ReviewNote>
       </div>
     </Section>
   );

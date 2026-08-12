@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Portrait coming soon">
+  <!--
+    Generic outline avatar, used where the practice has not supplied a real
+    portrait yet. Deliberately a line drawing on the page's beige tone rather
+    than a photographic stock face: a stock face beside a real dentist reads as
+    a second real dentist, which would be a misrepresentation.
+  -->
+  <rect width="200" height="200" fill="#EEF3F8"/>
+  <g fill="none" stroke="#1E6076" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55">
+    <circle cx="100" cy="78" r="30"/>
+    <path d="M46 158c0-27 24-44 54-44s54 17 54 44"/>
+  </g>
+</svg>
