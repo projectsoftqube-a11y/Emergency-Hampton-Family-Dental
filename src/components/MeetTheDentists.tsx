@@ -59,9 +59,24 @@ export default function MeetTheDentists() {
                   dimensions="900 × 1100"
                   alt={dentist.alt}
                   className="h-20 w-20 rounded-full ring-1 ring-beige-dark/50 sm:h-24 sm:w-24"
-                  // Card renders at 96px; next/image picks a 2x candidate off
-                  // this for retina, so the avatar stays sharp.
-                  sizes="96px"
+                  /*
+                    The avatar box is 80px on mobile and 96px from sm: up, but
+                    `sizes` deliberately declares double that.
+
+                    Declaring the true box size (this was `sizes="96px"`) meant
+                    a 1x display fetched a 96px image for a 96px box — no
+                    oversampling at all. At that size AVIF at the default
+                    quality 75 has almost nothing to work with, and the faces
+                    came out visibly soft against the crisp text beside them.
+
+                    Doubling the declared width makes every display fetch an
+                    oversampled candidate: 1x picks 256w, 2x picks 384w. The
+                    cost is trivial — the 256px avatar is 6KB, the 384px one
+                    9KB — and the crop is a circle of someone's face, which is
+                    exactly where softness is most obvious.
+                  */
+                  sizes="(max-width: 640px) 160px, 192px"
+                  quality={90}
                   objectPosition="center 20%"
                 />
                 {dentist.standIn && (

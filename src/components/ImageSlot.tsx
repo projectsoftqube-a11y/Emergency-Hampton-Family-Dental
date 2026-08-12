@@ -39,6 +39,12 @@ export type ImageSlotProps = {
   priority?: boolean;
   sizes?: string;
   objectPosition?: string;
+  /**
+   * next/image defaults to 75. Worth raising for small images of faces, where
+   * the encoder has few pixels to work with and compression artefacts land
+   * directly on the features people actually look at.
+   */
+  quality?: number;
 };
 
 export default function ImageSlot({
@@ -54,6 +60,7 @@ export default function ImageSlot({
   priority = false,
   sizes = "(max-width: 768px) 100vw, 50vw",
   objectPosition = "center",
+  quality,
 }: ImageSlotProps) {
   if (src) {
     return (
@@ -64,6 +71,7 @@ export default function ImageSlot({
           fill
           priority={priority}
           sizes={sizes}
+          quality={quality}
           className={cn("object-cover", imgClassName)}
           style={{ objectPosition }}
         />
