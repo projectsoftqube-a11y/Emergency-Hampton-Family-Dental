@@ -1,38 +1,5 @@
 import type { AccordionItem } from "@/components/Accordion";
 
-/**
- * "While you're on your way to us" - temporary first aid, not treatment.
- *
- * NOTE: FirstAid.tsx no longer renders from this constant. It now presents the
- * same guidance as numbered steps with an explicit "never do this" line, which
- * this flat q/a shape cannot express. This is kept deliberately as the record
- * of the originally approved prose - the component's steps are a split of this
- * wording, not a rewrite of it, and it is the reference for the clinician
- * review below. Delete it only once that review signs off the step wording.
- */
-export const FIRST_AID: AccordionItem[] = [
-  {
-    q: "Knocked-out tooth",
-    a: "Hold it by the crown (not the root), gently rinse if it's dirty, and keep it in milk or your own saliva. Come in right away - time really matters here.",
-  },
-  {
-    q: "Bad toothache",
-    a: "Rinse with warm salt water, gently floss to clear any trapped food, and hold a cold compress to your cheek. Over-the-counter pain relief can help until you're seen.",
-  },
-  {
-    q: "Swelling",
-    a: "Apply a cold compress to the outside of your cheek - never heat. Call us; swelling can be a sign of infection that shouldn't wait.",
-  },
-  {
-    q: "Broken or chipped tooth",
-    a: "Rinse your mouth, save any pieces if you can, and use a cold compress for swelling. Try not to chew on that side.",
-  },
-  {
-    q: "Bleeding after an injury",
-    a: "Bite gently on clean gauze for 10–15 minutes. If heavy bleeding won't stop, seek urgent medical care.",
-  },
-];
-
 /** "Quick answers" - also emitted as FAQPage structured data. */
 export const FAQS: AccordionItem[] = [
   {

@@ -8,7 +8,6 @@ import InsuranceAndFinancing from "@/components/InsuranceAndFinancing";
 import ProcessSteps from "@/components/ProcessSteps";
 import MeetTheDentists from "@/components/MeetTheDentists";
 import Reviews from "@/components/Reviews";
-import FirstAid from "@/components/FirstAid";
 import Faq from "@/components/Faq";
 import LocationBlock from "@/components/LocationBlock";
 import LpHeader from "@/components/LpHeader";
@@ -159,7 +158,6 @@ export default function EmergencyDentistLandingPage() {
         <ProcessSteps />
         <MeetTheDentists />
         <Reviews />
-        <FirstAid />
         <Faq />
         <LocationBlock />
         <LpFooter year={new Date().getFullYear()} />
