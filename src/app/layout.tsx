@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Exo_2, Inter } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
@@ -7,12 +7,10 @@ import "./globals.css";
  * Type pairing - chosen for this page specifically, not inherited from the
  * main site.
  *
- * Headings: Fraunces. A low-contrast, warm serif. The main site uses Playfair
- * Display, which is a didone - its hairline strokes thin out badly in white on
- * navy at the sizes this page uses on a 320px screen. Fraunces keeps the serif
- * character the brand is built on while staying sturdy and readable small, and
- * it reads reassuring rather than luxury, which is the right note for someone
- * in pain.
+ * Headings: Exo 2. A geometric variable sans with slightly squared terminals -
+ * sturdy at the 320px sizes this page uses, and it holds its weight in white
+ * on navy where the previous serif (Fraunces, and Playfair on the main site)
+ * thinned out. Requested by the practice for heading type.
  *
  * Body and UI: Inter. Large x-height, open apertures, and genuine tabular
  * numerals - which matters here, because the phone number is the conversion
@@ -21,16 +19,12 @@ import "./globals.css";
  * Both are variable fonts, self-hosted and subset by next/font, so this pairing
  * ships fewer bytes than the two static families it replaces.
  */
-const fraunces = Fraunces({
+// Exo 2 is a variable font, so no `weight` is pinned - it carries its whole
+// weight range and headings pick specific weights via Tailwind's font-*
+// classes. Only the upright style is loaded: no heading on this page is
+// italic any more, so shipping the italic set would be dead bytes.
+const exo2 = Exo_2({
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  // Fraunces is a variable font. next/font requires that when you request
-  // extra axes you do NOT also pin `weight` - the variable font already
-  // carries its whole weight range (wght is included automatically), and the
-  // headings pick specific weights via Tailwind's font-* classes.
-  // SOFT rounds the terminals slightly; opsz adapts the design to size.
-  // WONK is intentionally left out so the letterforms stay conventional.
-  axes: ["SOFT", "opsz"],
   variable: "--font-heading-family",
   display: "swap",
 });
@@ -52,7 +46,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="en" className={`${exo2.variable} ${inter.variable}`}>
       {/* No site header or footer by design - this is a paid-traffic landing
           page. Every outbound nav link is an exit path. The page supplies its
           own minimal header and footer. */}

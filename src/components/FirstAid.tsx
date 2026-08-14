@@ -112,11 +112,13 @@ export default function FirstAid() {
           <span className="h-px w-6 shrink-0 bg-primary/40" aria-hidden />
         </div>
 
-        <h2 className="mt-3 font-heading text-[1.6rem] leading-[1.12] tracking-[-0.02em] text-navy sm:text-[2rem] lg:text-[2.6rem]">
+        <h2 className="mt-3 font-heading text-[1.35rem] leading-[1.12] tracking-[-0.02em] text-navy sm:text-[2rem] lg:text-[2.6rem]">
           While you&apos;re on your way to us
         </h2>
 
-        <p className="mx-auto mt-3 max-w-xl text-[0.95rem] leading-relaxed text-navy/60 sm:text-base">
+        {/* Desktop only - "first aid until we see you" is already the plain
+            reading of the heading plus the cards below it. */}
+        <p className="mx-auto mt-3 hidden max-w-xl text-[0.95rem] leading-relaxed text-navy/60 sm:block sm:text-base">
           Quick, safe first aid to ease things until we see you. This is
           temporary - call us for treatment.
         </p>
@@ -128,11 +130,11 @@ export default function FirstAid() {
           worst possible placement for the one instruction on this page that is
           genuinely about someone's safety. */}
       <Reveal delay={0.04}>
-        <div className="mx-auto mt-8 flex max-w-3xl items-start gap-3 rounded-2xl border border-emergency/30 bg-emergency-soft px-4 py-3.5 sm:items-center sm:px-5">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emergency text-white">
-            <LifeBuoy className="h-4.5 w-4.5" strokeWidth={2.4} aria-hidden />
+        <div className="mx-auto mt-5 flex max-w-3xl items-start gap-2.5 rounded-xl border border-emergency/30 bg-emergency-soft px-3 py-2.5 sm:mt-8 sm:items-center sm:gap-3 sm:px-5 sm:py-3.5">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emergency text-white sm:h-9 sm:w-9">
+            <LifeBuoy className="h-4 w-4 sm:h-4.5 sm:w-4.5" strokeWidth={2.4} aria-hidden />
           </span>
-          <p className="min-w-0 text-[13px] leading-snug text-emergency-dark sm:text-[13.5px]">
+          <p className="min-w-0 text-[12px] leading-snug text-emergency-dark sm:text-[13.5px]">
             <strong className="font-bold">Go to an emergency room</strong> if you
             have facial swelling that affects your breathing or swallowing, or
             bleeding you cannot stop.
@@ -143,7 +145,7 @@ export default function FirstAid() {
       {/* ── Cards ──
           Auto-fit grid rather than fixed columns, so the five cards reflow
           without leaving a stranded single card on a row of its own. */}
-      <div className="mt-5 grid gap-3.5 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+      <div className="mt-4 grid gap-2.5 sm:mt-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {FIRST_AID.map((aid, i) => {
           const Icon = aid.icon;
 
@@ -163,32 +165,32 @@ export default function FirstAid() {
                   stronger signal at a glance than a tinted chip.
                 */}
                 {aid.urgent && (
-                  <p className="flex items-center gap-1.5 bg-emergency px-4 py-2 text-[10.5px] font-bold uppercase tracking-[0.08em] text-white">
+                  <p className="flex items-center gap-1.5 bg-emergency px-3 py-1.5 text-[9.5px] font-bold uppercase tracking-[0.08em] text-white sm:px-4 sm:py-2 sm:text-[10.5px]">
                     <Clock className="h-3 w-3 shrink-0" strokeWidth={3} aria-hidden />
                     <span className="min-w-0">{aid.urgent}</span>
                   </p>
                 )}
 
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-1 flex-col p-3.5 sm:p-5">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
                     <span
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-11 sm:w-11 sm:rounded-xl ${
                         aid.urgent
                           ? "bg-emergency/10 text-emergency"
                           : "bg-primary/10 text-primary"
                       }`}
                     >
-                      <Icon className="h-5.5 w-5.5" strokeWidth={2} aria-hidden />
+                      <Icon className="h-4.5 w-4.5 sm:h-5.5 sm:w-5.5" strokeWidth={2} aria-hidden />
                     </span>
 
-                    <h3 className="min-w-0 font-heading text-[16px] leading-snug text-navy sm:text-[17px]">
+                    <h3 className="min-w-0 font-heading text-[14.5px] leading-snug text-navy sm:text-[17px]">
                       {aid.title}
                     </h3>
                   </div>
 
                 {/* Numbered so the order is unambiguous - with a knocked-out
                     tooth, doing step three before step one damages the root. */}
-                <ol className="mt-4 flex-1 space-y-2.5">
+                <ol className="mt-3 flex-1 space-y-1.5 sm:mt-4 sm:space-y-2.5">
                   {aid.steps.map((step, s) => (
                     <li key={step} className="flex min-w-0 gap-2.5">
                       <span
@@ -197,7 +199,7 @@ export default function FirstAid() {
                       >
                         {s + 1}
                       </span>
-                      <span className="min-w-0 text-[13px] leading-relaxed text-navy/75">
+                      <span className="min-w-0 text-[12.5px] leading-snug text-navy/75 sm:text-[13px] sm:leading-relaxed">
                         {step}
                       </span>
                     </li>
@@ -205,7 +207,7 @@ export default function FirstAid() {
                 </ol>
 
                   {aid.never && (
-                    <p className="mt-4 flex min-w-0 items-start gap-2 rounded-lg bg-emergency-soft px-3 py-2 text-[12px] font-semibold leading-snug text-emergency-dark">
+                    <p className="mt-3 flex min-w-0 items-start gap-2 rounded-lg bg-emergency-soft px-2.5 py-1.5 text-[11.5px] font-semibold leading-snug text-emergency-dark sm:mt-4 sm:px-3 sm:py-2 sm:text-[12px]">
                       <Ban className="mt-px h-3.5 w-3.5 shrink-0" strokeWidth={2.6} aria-hidden />
                       <span className="min-w-0">{aid.never}</span>
                     </p>

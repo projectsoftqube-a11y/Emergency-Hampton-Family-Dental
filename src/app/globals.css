@@ -54,9 +54,11 @@
   --color-beige-dark: #C4CDDA;     /* deeper cool neutral / borders */
   --color-white: #ffffff;
 
-  /* Fraunces for headings, Inter for everything else - see src/app/layout.tsx
-     for why this page departs from the main site's Playfair/Poppins pairing. */
-  --font-heading: var(--font-heading-family), Georgia, "Times New Roman", serif;
+  /* Exo 2 for headings, Inter for everything else - see src/app/layout.tsx.
+     The fallback stack is sans, not serif: Exo 2 is a geometric sans, so a
+     Georgia fallback would flash the wrong letterform shape entirely while
+     the webfont loads. */
+  --font-heading: var(--font-heading-family), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-body: var(--font-body-family), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -163,6 +165,35 @@
 @keyframes lp-marquee {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ─── Offer badge attention loop ───
+   Two cooperating animations on the "No insurance, no problem!" pill, which
+   sits on a dark band and was reading as static chrome rather than an offer.
+
+   `lp-badge-pulse` breathes the ring and glow; `lp-badge-sheen` sweeps a
+   highlight across it every few seconds. Both animate only transform and
+   opacity/box-shadow so they stay off the layout path - this band is well
+   below the fold, but the animation runs forever, and a looping animation that
+   triggers layout is a permanent battery cost on a phone.
+
+   The global prefers-reduced-motion block above neutralises both. */
+@keyframes lp-badge-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0);
+    border-color: rgba(255, 255, 255, 0.55);
+  }
+}
+
+@keyframes lp-badge-sheen {
+  /* Parked off the left edge for most of the cycle, so the sweep reads as an
+     occasional glint rather than a constantly moving stripe. */
+  0%, 65%  { transform: translate3d(-120%, 0, 0); }
+  100%     { transform: translate3d(220%, 0, 0); }
 }
 
 /* ─── Thin, on-theme scrollbars ─── */

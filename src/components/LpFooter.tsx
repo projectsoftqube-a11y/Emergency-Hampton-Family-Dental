@@ -59,7 +59,7 @@ export default function LpFooter({ year }: { year: number }) {
           className="mx-auto mb-6 inline-flex rounded-xl bg-white px-4 py-2.5 transition-opacity hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
         >
           <Image
-            src="/logo.svg"
+            src="/logo.avif"
             alt="Hampton Family Dental"
             width={1282}
             height={321}

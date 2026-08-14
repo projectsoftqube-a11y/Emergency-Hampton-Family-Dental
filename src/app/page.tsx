@@ -146,7 +146,7 @@ export default function EmergencyDentistLandingPage() {
       </a>
 
       {/* pb reserves room for the mobile sticky call bar */}
-      <main className="w-full overflow-x-hidden bg-white pb-[58px] md:pb-0">
+      <main className="w-full overflow-x-hidden bg-white pb-[52px] md:pb-0">
         <LpHeader />
         <Hero />
         {/* Reads public/images/lp/symptoms/ - any card with a matching file

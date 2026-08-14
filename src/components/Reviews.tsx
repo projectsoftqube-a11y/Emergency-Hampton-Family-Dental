@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Quote, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import ReviewNote from "./ReviewNote";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -77,7 +78,68 @@ const REVIEWS = [
     name: "Gary Balasa",
     meta: "a year ago",
   },
+  {
+    quote:
+      "Jeff is a great dentist. His staff is very friendly. I highly recommend Jeff and his practice for all dental needs.",
+    name: "David Lloyd",
+    meta: "6 reviews · 6 days ago",
+  },
+  {
+    quote:
+      "Dr Brenner is one of the best dentists I have ever had. He is thorough and extremely knowledgeable and cares about his patients. He also takes the time to discuss with them their dental needs. The staff are fantastic and caring.",
+    name: "Mary V Forlano",
+    meta: "9 reviews · 6 days ago",
+  },
+  {
+    quote:
+      "Very impressed with Dr. Brenner and his team. Highly recommend.",
+    name: "Fred Kamm",
+    meta: "1 review · 5 months ago",
+  },
+  {
+    quote: "Would never go anywhere else!",
+    name: "Debbi Rotenberg",
+    meta: "2 reviews · 6 months ago",
+  },
+  {
+    quote:
+      "Excellent dental practice. Dr. Brenner is professional, knowledgeable and personable. Staff is friendly. Before going here I use to shake uncontrollably as I had a fear of dental visits from a bad experience at another practice. That fear is now gone and I no longer shake.",
+    name: "Miss R.",
+    meta: "Local Guide · a year ago",
+  },
+  {
+    quote:
+      "I had a crown come off. I called for an appointment. Angela returned my call within minutes. I was in the chair within one hour. Casey was setting up and assisting as Dr. Brenner was working on my tooth. The staff is always so friendly.",
+    name: "Donnalee Charlton",
+    meta: "5 reviews · 9 months ago",
+  },
+  {
+    quote:
+      "What more can you say? The best dentist and best staff you can ask for. Honest, friendly and caring all around. Everyone at the practice is fantastic and we always feel welcome.",
+    name: "Danny A.",
+    meta: "Local Guide · a year ago",
+  },
 ];
+
+/**
+ * Deterministic avatar tint from the reviewer's name, so a given person keeps
+ * the same colour across renders and between the marquee's two copies. Google
+ * does the same thing for reviewers with no profile photo.
+ */
+const AVATAR_COLORS = [
+  "bg-[#1E6076]",
+  "bg-[#0F8A6D]",
+  "bg-[#B45309]",
+  "bg-[#7C3AED]",
+  "bg-[#BE123C]",
+  "bg-[#0369A1]",
+];
+
+function avatarColor(name: string) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+}
 
 function Stars({ className = "" }: { className?: string }) {
   return (
@@ -104,26 +166,62 @@ function ReviewCard({
   /** Marks the marquee's second copy so it is not announced twice. */
   duplicate?: boolean;
 }) {
+  /*
+    Laid out the way a Google review actually is, top to bottom: avatar +
+    name + reviewer meta, then the star row and date, then the text. The
+    previous card led with stars and a decorative quote mark, which reads as
+    a marketing testimonial - the thing visitors have learned to discount.
+    Matching the familiar shape is what makes it read as a real review.
+
+    The avatar is a coloured initial disc, which is exactly what Google shows
+    for a reviewer with no profile photo - so it is the honest rendering here,
+    not a stand-in for a missing asset.
+  */
   return (
     <figure
       aria-hidden={duplicate || undefined}
-      className="flex w-[300px] shrink-0 flex-col rounded-2xl border border-beige-dark/50 bg-white p-5 shadow-[0_10px_30px_-20px_rgba(20,60,80,0.4)] sm:w-[360px] sm:p-6"
+      className="flex w-[290px] shrink-0 flex-col rounded-xl border border-beige-dark/50 bg-white p-4 shadow-[0_10px_30px_-20px_rgba(20,60,80,0.4)] sm:w-[340px] sm:p-5"
     >
-      <div className="flex items-center justify-between gap-3">
-        <Stars />
-        <Quote className="h-5 w-5 shrink-0 text-urgent/30" strokeWidth={2} aria-hidden />
+      {/* ── Reviewer ── */}
+      <div className="flex min-w-0 items-center gap-2.5">
+        <span
+          aria-hidden
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[15px] font-semibold text-white ${avatarColor(
+            review.name
+          )}`}
+        >
+          {review.name.trim().charAt(0).toUpperCase()}
+        </span>
+
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[13.5px] font-semibold leading-tight text-navy">
+            {review.name}
+          </span>
+          <span className="mt-0.5 block truncate text-[11px] leading-tight text-navy/50">
+            {review.meta}
+          </span>
+        </span>
+
+        {/* Google's own mark, bottom-right of the avatar row - the same place
+            Google puts it on an embedded review. */}
+        <Image
+          src="/images/lp/google-g.svg"
+          alt=""
+          width={16}
+          height={16}
+          className="h-4 w-4 shrink-0"
+        />
       </div>
 
-      <blockquote className="mt-3.5 flex-1 text-[13.5px] leading-relaxed text-navy/80 sm:text-[14.5px]">
-        &ldquo;{review.quote}&rdquo;
-      </blockquote>
+      {/* ── Rating ── */}
+      <div className="mt-2.5 flex items-center gap-2">
+        <Stars />
+      </div>
 
-      <figcaption className="mt-4 border-t border-beige pt-3.5">
-        <p className="text-[13.5px] font-bold text-navy">{review.name}</p>
-        <p className="mt-0.5 text-[11.5px] text-navy/50">
-          {review.meta} · Verified Google review
-        </p>
-      </figcaption>
+      {/* ── Review text ── */}
+      <blockquote className="mt-2 flex-1 text-[13px] leading-relaxed text-navy/75 sm:text-[13.5px]">
+        {review.quote}
+      </blockquote>
     </figure>
   );
 }
@@ -244,7 +342,12 @@ export default function Reviews() {
         transition={{ duration: 0.65, delay: 0.2, ease: "easeOut" }}
         className="relative mt-10 sm:mt-12 lg:mt-14"
       >
-        <MarqueeRow items={REVIEWS} duration={95} />
+        {/* Duration scales with the card count, not a hardcoded number: the
+            track grew from 10 cards to 17, and at a fixed 95s that made the
+            same pixels-per-second budget cover 60% more distance - i.e. the
+            row visibly sped up just because reviews were added. ~9s per card
+            keeps the reading pace steady however many the office supplies. */}
+        <MarqueeRow items={REVIEWS} duration={REVIEWS.length * 9} />
 
         {/* Edge fades so cards dissolve rather than being cut off mid-word. */}
         <div

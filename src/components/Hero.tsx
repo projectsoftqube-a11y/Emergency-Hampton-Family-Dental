@@ -30,7 +30,10 @@ const CHIPS = [
  */
 export default function Hero() {
   return (
-    <section className="relative isolate w-full overflow-hidden bg-white">
+    /* id is the observation target for StickyCallBar - the mobile bar stays
+       hidden while any part of this section is on screen, because the hero
+       already shows the same Call/Text pair. */
+    <section id="hero" className="relative isolate w-full overflow-hidden bg-white">
       {/* ── Background wash ── */}
       <div
         aria-hidden
@@ -118,7 +121,11 @@ export default function Hero() {
             >
               Get out of tooth pain in{" "}
               <span className="relative inline-block">
-                <span className="font-normal italic text-primary">Southampton, PA</span>
+                {/* Same weight and style as the rest of the h1 - only the
+                    colour and the underline set it apart now. The previous
+                    `font-normal italic` broke it out of the heading as if it
+                    were a separate serif pull-quote. */}
+                <span className="text-primary">Southampton, PA</span>
                 <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
@@ -146,7 +153,11 @@ export default function Hero() {
                 alt="A woman holding her cheek in discomfort from a toothache"
                 tone="light"
                 corner
-                className="aspect-[4/3] w-full rounded-2xl ring-1 ring-navy/8"
+                /* Half the height it used to be. At 4/3 this photo ran ~285px
+                   tall on a 390px screen and pushed the CTAs below the fold -
+                   on a page whose entire job is getting the call made. 16/9
+                   keeps the same emotional read at roughly half the height. */
+                className="aspect-[16/9] w-full rounded-2xl ring-1 ring-navy/8"
                 sizes="100vw"
                 objectPosition="center 30%"
               />
@@ -180,12 +191,19 @@ export default function Hero() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.24 }}
-              className="mt-6 grid gap-2.5 sm:grid-cols-2 sm:gap-3"
+              /* Two-up from 390px (Tailwind's `xs` is not a default breakpoint,
+                 so this uses an arbitrary min-width variant). Stacked, the two
+                 CTAs ate most of the remaining viewport; side by side they fit
+                 on one row with the image still visible above them. */
+              className="mt-6 grid gap-2.5 [@media(min-width:390px)]:grid-cols-2 sm:gap-3"
             >
               <a
                 href={PHONE_TEL}
                 data-cta="hero-call"
-                className="group flex min-w-0 items-center justify-center gap-2.5 rounded-2xl bg-urgent px-4 py-3.5 text-white shadow-[0_14px_32px_-10px_rgba(15,138,109,0.65)] transition-all hover:bg-urgent-dark hover:shadow-[0_18px_40px_-10px_rgba(15,138,109,0.75)] active:scale-[0.99] sm:py-4"
+                /* py-2.5 on mobile, not py-3.5: two lines of label already
+                   give this a comfortable tap target (~52px, above the 44px
+                   minimum), and the extra padding only pushed content down. */
+                className="group flex min-w-0 items-center justify-center gap-2 rounded-2xl bg-urgent px-3 py-2.5 text-white shadow-[0_14px_32px_-10px_rgba(15,138,109,0.65)] transition-all hover:bg-urgent-dark hover:shadow-[0_18px_40px_-10px_rgba(15,138,109,0.75)] active:scale-[0.99] sm:gap-2.5 sm:px-4 sm:py-4"
               >
                 <Phone className="h-4 w-4 shrink-0" strokeWidth={2.6} aria-hidden />
                 <span className="min-w-0 text-left">
@@ -201,7 +219,7 @@ export default function Hero() {
               <a
                 href={PHONE_SMS}
                 data-cta="hero-text"
-                className="group flex min-w-0 items-center justify-center gap-2.5 rounded-2xl border border-navy/12 bg-white px-4 py-3.5 text-navy shadow-[0_10px_28px_-14px_rgba(20,60,80,0.45)] transition-all hover:border-primary/35 hover:bg-beige-light active:scale-[0.99] sm:py-4"
+                className="group flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-navy/12 bg-white px-3 py-2.5 text-navy shadow-[0_10px_28px_-14px_rgba(20,60,80,0.45)] transition-all hover:border-primary/35 hover:bg-beige-light active:scale-[0.99] sm:gap-2.5 sm:px-4 sm:py-4"
               >
                 <MessageSquareText
                   className="h-4 w-4 shrink-0 text-primary"
