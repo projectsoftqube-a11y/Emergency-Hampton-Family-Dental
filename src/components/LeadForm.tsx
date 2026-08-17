@@ -113,14 +113,34 @@ export default function LeadForm({ compact = false }: { compact?: boolean }) {
      * inline confirmation. A distinct URL is worth more than the in-place
      * state: it gives Google Ads and GA4 a clean destination conversion rather
      * than requiring a click-event trigger, it survives a back-button return
-     * to the form, and it gives the confirmation room for the first-aid and
-     * "what happens next" content that would not fit inside the card.
+     * to the form, and it gives the confirmation room for the "what happens
+     * next" content that would not fit inside the card.
      *
      * `sending` is deliberately left true. Navigation is not instantaneous, and
      * clearing it here would re-enable the submit button for the few hundred
      * milliseconds before the route changes - long enough for someone in pain
      * to tap twice and file two leads.
      */
+    /*
+      GTM conversion signal. Deliberately here and not on the button's click
+      handler: this line is only reached once validation has passed AND the
+      backend has accepted the enquiry, so the event counts real leads rather
+      than submit attempts, bot hits and validation failures.
+
+      Pushed before the router.push so the event is on the dataLayer while this
+      page is still mounted - GTM then has a full tick to read it.
+
+      No PII in the payload. Name, phone and symptom stay out of it: the
+      dataLayer is readable by every tag in the container, and this is health
+      context.
+    */
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "form_submit_success",
+      form_name: "appointment_request",
+      page_type: "emergency",
+    });
+
     rememberFirstName(values.name);
     router.push(THANK_YOU_PATH);
   };
