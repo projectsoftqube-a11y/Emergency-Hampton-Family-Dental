@@ -30,7 +30,7 @@ export default function OfferBand() {
           */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_55%_at_50%_-10%,rgba(15,138,109,0.30),transparent_70%),radial-gradient(50%_60%_at_100%_110%,rgba(30,96,118,0.45),transparent_72%)]"
+            className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_55%_at_50%_-10%,rgba(30,96,118,0.30),transparent_70%),radial-gradient(50%_60%_at_100%_110%,rgba(30,96,118,0.45),transparent_72%)]"
           />
           <div
             aria-hidden
@@ -62,7 +62,11 @@ export default function OfferBand() {
             }}
           >
             Emergency exam + X-rays special at{" "}
-            <span className="whitespace-nowrap text-urgent-light">$59</span>{" "}
+            {/* steel-light, not urgent-light. This sits on the navy band, and
+                now that urgent-light resolves to petrol #3B8299 it would only
+                reach about 2.5:1 against navy - below AA even for large text.
+                steel-light is a main-site token and clears 5:1 here. */}
+            <span className="whitespace-nowrap text-steel-light">$59</span>{" "}
             for patients with no insurance
           </p>
 
@@ -82,7 +86,7 @@ export default function OfferBand() {
               no insurance.{" "}
             </span>
             We show you exactly what&apos;s wrong and what each option costs{" "}
-            <strong className="font-bold underline decoration-urgent-light decoration-2 underline-offset-2">
+            <strong className="font-bold underline decoration-steel-light decoration-2 underline-offset-2">
               before
             </strong>{" "}
             we do
@@ -92,7 +96,7 @@ export default function OfferBand() {
           <a
             href={PHONE_TEL}
             data-cta="offer-call"
-            className="mt-5 inline-flex w-full max-w-xs items-center justify-center gap-2 rounded-2xl bg-urgent px-5 py-3 text-[14.5px] font-bold text-white shadow-[0_14px_36px_-8px_rgba(15,138,109,0.8)] transition-all hover:bg-urgent-dark active:scale-[0.99] sm:mt-7 sm:w-auto sm:py-3.5 sm:text-[16px]"
+            className="mt-5 inline-flex w-full max-w-xs items-center justify-center gap-2 rounded-2xl bg-urgent px-5 py-3 text-[14.5px] font-bold text-white shadow-[0_14px_36px_-8px_rgba(30,96,118,0.8)] transition-all hover:bg-urgent-dark active:scale-[0.99] sm:mt-7 sm:w-auto sm:py-3.5 sm:text-[16px]"
           >
             <Phone className="h-4 w-4 shrink-0" strokeWidth={2.6} aria-hidden />
             <span className="truncate">Call {PHONE_DISPLAY}</span>

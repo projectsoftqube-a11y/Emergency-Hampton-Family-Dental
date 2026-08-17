@@ -24,7 +24,7 @@ export default function LpFooter({ year }: { year: number }) {
       {/* Radial gradient rather than a blurred circle - see OfferBand. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_35%_at_50%_0%,rgba(15,138,109,0.24),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(45%_35%_at_50%_0%,rgba(30,96,118,0.24),transparent_70%)]"
       />
       <div
         aria-hidden
@@ -94,7 +94,7 @@ export default function LpFooter({ year }: { year: number }) {
           <a
             href={PHONE_TEL}
             data-cta="footer-call"
-            className="flex items-center justify-center gap-2 rounded-2xl bg-urgent px-4 py-3.5 text-[15px] font-bold text-white shadow-[0_12px_32px_-8px_rgba(15,138,109,0.7)] transition-colors hover:bg-urgent-dark"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-urgent px-4 py-3.5 text-[15px] font-bold text-white shadow-[0_12px_32px_-8px_rgba(30,96,118,0.7)] transition-colors hover:bg-urgent-dark"
           >
             <Phone className="h-4 w-4 shrink-0" strokeWidth={2.6} aria-hidden />
             <span className="whitespace-nowrap">{PHONE_DISPLAY}</span>

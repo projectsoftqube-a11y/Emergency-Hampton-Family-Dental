@@ -254,7 +254,7 @@ export default function LeadForm({ compact = false }: { compact?: boolean }) {
           type="submit"
           disabled={sending}
           data-cta="form-submit"
-          className="group flex w-full items-center justify-center gap-2 rounded-xl bg-urgent px-4 py-3.5 text-[15px] font-bold text-white shadow-[0_10px_28px_-6px_rgba(15,138,109,0.6)] transition-all hover:bg-urgent-dark hover:shadow-[0_14px_34px_-6px_rgba(15,138,109,0.7)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:text-[16px]"
+          className="group flex w-full items-center justify-center gap-2 rounded-xl bg-urgent px-4 py-3.5 text-[15px] font-bold text-white shadow-[0_10px_28px_-6px_rgba(30,96,118,0.6)] transition-all hover:bg-urgent-dark hover:shadow-[0_14px_34px_-6px_rgba(30,96,118,0.7)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:text-[16px]"
         >
           {sending ? (
             <>

@@ -46,7 +46,7 @@ export default function Hero() {
           this is the first thing on the page. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(40%_45%_at_0%_0%,rgba(30,96,118,0.10),transparent_70%),radial-gradient(35%_40%_at_25%_100%,rgba(15,138,109,0.10),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(40%_45%_at_0%_0%,rgba(30,96,118,0.10),transparent_70%),radial-gradient(35%_40%_at_25%_100%,rgba(30,96,118,0.10),transparent_70%)]"
       />
 
       {/* ── Photograph - full-bleed behind the whole section (desktop) ──
@@ -203,7 +203,7 @@ export default function Hero() {
                 /* py-2.5 on mobile, not py-3.5: two lines of label already
                    give this a comfortable tap target (~52px, above the 44px
                    minimum), and the extra padding only pushed content down. */
-                className="group flex min-w-0 items-center justify-center gap-2 rounded-2xl bg-urgent px-3 py-2.5 text-white shadow-[0_14px_32px_-10px_rgba(15,138,109,0.65)] transition-all hover:bg-urgent-dark hover:shadow-[0_18px_40px_-10px_rgba(15,138,109,0.75)] active:scale-[0.99] sm:gap-2.5 sm:px-4 sm:py-4"
+                className="group flex min-w-0 items-center justify-center gap-2 rounded-2xl bg-urgent px-3 py-2.5 text-white shadow-[0_14px_32px_-10px_rgba(30,96,118,0.65)] transition-all hover:bg-urgent-dark hover:shadow-[0_18px_40px_-10px_rgba(30,96,118,0.75)] active:scale-[0.99] sm:gap-2.5 sm:px-4 sm:py-4"
               >
                 <Phone className="h-4 w-4 shrink-0" strokeWidth={2.6} aria-hidden />
                 <span className="min-w-0 text-left">

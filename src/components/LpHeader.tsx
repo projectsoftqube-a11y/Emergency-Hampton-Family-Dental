@@ -45,7 +45,7 @@ export default function LpHeader() {
           <a
             href={PHONE_TEL}
             data-cta="header-call"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-urgent px-3.5 py-2 text-[12.5px] font-bold text-white shadow-[0_8px_20px_-6px_rgba(15,138,109,0.5)] transition-colors hover:bg-urgent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-urgent sm:gap-2 sm:px-4 sm:py-2.5 sm:text-[13.5px]"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-urgent px-3.5 py-2 text-[12.5px] font-bold text-white shadow-[0_8px_20px_-6px_rgba(30,96,118,0.5)] transition-colors hover:bg-urgent-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-urgent sm:gap-2 sm:px-4 sm:py-2.5 sm:text-[13.5px]"
           >
             <Phone className="h-3.5 w-3.5 shrink-0" strokeWidth={2.6} aria-hidden />
             <span className="hidden sm:inline">{PHONE_DISPLAY}</span>

@@ -129,7 +129,7 @@ export default function SymptomTriage({
                     className={`absolute left-2 top-2 inline-flex max-w-[calc(100%-1rem)] items-center gap-1 truncate rounded-full px-2 py-0.5 text-[8.5px] font-bold uppercase tracking-wide shadow-sm backdrop-blur-sm sm:left-3 sm:top-3 sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-[10px] ${
                       problem.urgent
                         ? "bg-emergency text-white"
-                        : "bg-white/95 text-emerald-700"
+                        : "bg-white/95 text-primary"
                     }`}
                   >
                     {problem.urgent && (

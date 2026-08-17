@@ -127,7 +127,7 @@ export default function ThankYou() {
       <section className="relative w-full overflow-hidden bg-navy-dark px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_45%_at_50%_0%,rgba(15,138,109,0.28),transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(55%_45%_at_50%_0%,rgba(30,96,118,0.28),transparent_70%)]"
         />
         <div
           aria-hidden
@@ -142,7 +142,7 @@ export default function ThankYou() {
             initial={{ scale: 0.4, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring", stiffness: 240, damping: 16 }}
-            className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-urgent shadow-[0_16px_40px_-12px_rgba(15,138,109,0.9)] sm:h-20 sm:w-20"
+            className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-urgent shadow-[0_16px_40px_-12px_rgba(30,96,118,0.9)] sm:h-20 sm:w-20"
           >
             <motion.span
               aria-hidden
@@ -210,7 +210,7 @@ export default function ThankYou() {
               <a
                 href={PHONE_TEL}
                 data-cta="form-success-call"
-                className="flex min-w-0 items-center justify-center gap-2 rounded-2xl bg-urgent px-4 py-4 text-[15.5px] font-bold text-white shadow-[0_14px_36px_-8px_rgba(15,138,109,0.75)] transition-all hover:bg-urgent-dark active:scale-[0.99] sm:text-[16px]"
+                className="flex min-w-0 items-center justify-center gap-2 rounded-2xl bg-urgent px-4 py-4 text-[15.5px] font-bold text-white shadow-[0_14px_36px_-8px_rgba(30,96,118,0.75)] transition-all hover:bg-urgent-dark active:scale-[0.99] sm:text-[16px]"
               >
                 <Phone className="h-4.5 w-4.5 shrink-0" strokeWidth={2.6} aria-hidden />
                 <span className="truncate">{PHONE_DISPLAY}</span>

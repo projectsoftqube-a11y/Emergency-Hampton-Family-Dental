@@ -127,12 +127,12 @@ const REVIEWS = [
  * does the same thing for reviewers with no profile photo.
  */
 const AVATAR_COLORS = [
-  "bg-[#1E6076]",
-  "bg-[#0F8A6D]",
-  "bg-[#B45309]",
-  "bg-[#7C3AED]",
-  "bg-[#BE123C]",
-  "bg-[#0369A1]",
+  "bg-[#1E6076]", // primary petrol
+  "bg-[#5C7098]", // steel-dark - replaced a green (#0F8A6D); the brand has no green
+  "bg-[#B45309]", // amber
+  "bg-[#7C3AED]", // violet
+  "bg-[#BE123C]", // rose
+  "bg-[#0369A1]", // blue
 ];
 
 function avatarColor(name: string) {
@@ -289,7 +289,7 @@ export default function Reviews() {
       {/* Ambient - radial gradients, not blur filters (see OfferBand). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(55%_50%_at_15%_0%,rgba(30,96,118,0.06),transparent_70%),radial-gradient(45%_50%_at_90%_100%,rgba(15,138,109,0.06),transparent_72%)]"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(55%_50%_at_15%_0%,rgba(30,96,118,0.06),transparent_70%),radial-gradient(45%_50%_at_90%_100%,rgba(30,96,118,0.06),transparent_72%)]"
       />
 
       {/* ── Header ── */}

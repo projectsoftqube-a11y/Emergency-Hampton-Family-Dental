@@ -25,15 +25,23 @@
   --color-steel-light: #A9B7D2;
   --color-steel-dark: #5C7098;
 
-  /* Accent - fresh medical teal-green. NEW on this landing page; the parent
-     site has no accent colour because it never needed one. Reads as "go /
-     healthy" rather than alarm, and sits cleanly beside petrol on the light
-     surfaces. Passes AA with white text at 14px+. Token names stay
-     "urgent-*" so every existing call site keeps working. */
-  --color-urgent: #0F8A6D;
-  --color-urgent-dark: #0B6D56;
-  --color-urgent-light: #17B08B;
-  --color-urgent-soft: #ECF9F5;
+  /* Accent - petrol, same as primary.
+
+     This family used to be a teal-green (#0F8A6D) invented for this landing
+     page. The client rejected it: the campaign has to look like the parent
+     site, and hamptonfamilydentist.com defines no accent colour at all - its
+     own call-to-action buttons are plain `bg-primary` #1E6076. So these now
+     resolve to the petrol family and the page carries no colour the main site
+     does not have.
+
+     The token names stay "urgent-*" rather than being deleted, so all eight
+     component files keep working untouched and the swap is one edit here.
+     They are aliases now, not a separate palette - if you need a real accent
+     later, change these four values and the whole site follows. */
+  --color-urgent: #1E6076;
+  --color-urgent-dark: #143C50;
+  --color-urgent-light: #3B8299;
+  --color-urgent-soft: #F2F5F9;
 
   /* Emergency - true alert red. Reserved for genuine urgency ONLY: the
      "Emergency Dentist" badge, severe-symptom warnings, the go-to-the-ER
