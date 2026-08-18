@@ -55,12 +55,19 @@ const GTM_ID = "GTM-WLNN5FJV";
  * The Ads conversion itself fires from /thank-you (see ThankYou.tsx), not
  * here: `config` only identifies the account, it does not count a lead.
  *
- * NOTE FOR WHOEVER CONFIGURES GTM: the Google Ads conversion for
- * AW-18372303940 is now hardcoded on the thank-you page. Do NOT also add a
- * Google Ads Conversion Tracking tag for that same conversion label inside
- * GTM-WLNN5FJV - it would fire twice and inflate the campaign's conversion
- * count. GTM should handle GA4 events, call/text click tracking and any other
- * conversion actions instead.
+ * FOR WHOEVER CONFIGURES GTM: the Google Ads lead conversion for
+ * AW-18372303940 is already reported from /thank-you (AdsConversion.tsx).
+ * Adding a second Google Ads Conversion Tracking tag for the same label inside
+ * GTM-WLNN5FJV is redundant - and if you do, gate it on a blocking trigger so
+ * the two cannot both count the same lead:
+ *
+ *   Custom JavaScript variable:
+ *     function () { return !!window.__hfdAdsConversionFired; }
+ *   Use it as a blocking trigger on the Ads conversion tag.
+ *
+ * The page sets that flag as soon as it reports the conversion, so whichever
+ * path fires first wins and the lead is counted once. GTM is still the right
+ * home for GA4 events and the tel:/sms: click tracking.
  */
 const GA4_ID = "G-1KLWZ2499J";
 const GOOGLE_ADS_ID = "AW-18372303940";

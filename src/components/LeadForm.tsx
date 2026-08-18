@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AlertCircle, ArrowRight, Loader2 } from "lucide-react";
 import { sendEnquiry } from "@/lib/sendEnquiry";
-import { rememberFirstName } from "@/lib/leadStore";
+import { markConversionPending, rememberFirstName } from "@/lib/leadStore";
 import { isValid, validateName, validatePhone } from "@/lib/validation";
 import { PHONE_DISPLAY, PHONE_TEL, SHOW_REVIEW_NOTES } from "@/lib/lp.config";
 
@@ -140,6 +140,14 @@ export default function LeadForm({ compact = false }: { compact?: boolean }) {
       form_name: "appointment_request",
       page_type: "emergency",
     });
+
+    /*
+      Arms the Google Ads conversion for /thank-you. Written here - after the
+      backend accepted - so the tag on the confirmation page fires for real
+      leads only, and exactly once: a refresh, a back-button return or a direct
+      visit to /thank-you finds no token and reports nothing.
+    */
+    markConversionPending();
 
     rememberFirstName(values.name);
     router.push(THANK_YOU_PATH);

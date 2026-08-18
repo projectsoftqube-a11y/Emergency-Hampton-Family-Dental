@@ -16,5 +16,13 @@ export {};
 declare global {
   interface Window {
     dataLayer?: (Record<string, unknown> | unknown[] | IArguments)[];
+
+    /**
+     * Set once the Google Ads lead conversion has been reported for this
+     * document, by whichever path got there first (the hardcoded tag on
+     * /thank-you, or a tag inside the GTM container). Both check it, so the
+     * conversion is counted once even if both are configured.
+     */
+    __hfdAdsConversionFired?: boolean;
   }
 }

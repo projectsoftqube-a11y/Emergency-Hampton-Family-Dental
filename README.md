@@ -173,14 +173,40 @@ Every CTA carries a `data-cta` attribute, so GTM needs one trigger rather than f
 | `thanks-text` | Text button on `/thank-you` |
 | `symptom-1` … `symptom-6` | Symptom triage cards |
 | `offer-call` | $59 offer band |
-| `firstaid-call` | First-aid section |
+| `insurance-not-listed` | "Don't see your plan?" card |
+| `insurance-email` | Insurance-card email link |
 | `location-directions` | Get directions |
 | `footer-call` / `footer-text` | Footer |
 | `sticky-call` / `sticky-text` | Mobile sticky bar |
 
 **GTM setup:** a Click trigger on `Click Element` matching CSS selector `[data-cta]`, pushing that attribute as an event parameter. That gives per-placement call attribution - it tells you whether the hero or the sticky bar is actually earning the calls, which is the number that decides your next iteration.
 
-**Form conversions** are simpler: `/thank-you` is only ever reached by a successful submit, so use a **destination** conversion on that path in Google Ads and a page_view-based key event in GA4. No click trigger, no `dataLayer` push, and it cannot fire on a submit that failed. Exclude `/thank-you` from GA4 landing-page reports - it is `noindex, nofollow`, but direct hits from a shared link would otherwise show up as sessions.
+### What is installed
+
+Three things ship in the page itself:
+
+1. **GTM container `GTM-WLNN5FJV`** - loader in `layout.tsx`, `<noscript>` iframe first inside `<body>`.
+2. **Google tag (gtag.js)** - GA4 `G-1KLWZ2499J` and Google Ads `AW-18372303940`, both `config`d on one load, on every page.
+3. **Ads lead conversion** `AW-18372303940/OlxtCI_e4OMcEMS4zLhE` - fired from `/thank-you` by `AdsConversion.tsx`.
+
+### The lead signal
+
+A lead is a **successful** submit: validation passed *and* `/api/enquiry` accepted it. At that moment `LeadForm` does two things - pushes `form_submit_success` onto the `dataLayer` (for GTM) and arms a one-time sessionStorage token (for the conversion tag on `/thank-you`).
+
+Use **either** path for the Ads conversion, not both:
+
+| Path | Trigger |
+|---|---|
+| Already in the page | `AdsConversion.tsx` on `/thank-you` - nothing to configure |
+| GTM | Google Ads Conversion Tracking tag, Custom Event trigger on `form_submit_success` |
+
+If you configure the GTM tag as well, **gate it** so one lead cannot be counted twice - Custom JavaScript variable `function () { return !!window.__hfdAdsConversionFired; }` used as a blocking trigger. The page sets that flag the moment it reports the conversion, so whichever path runs first wins.
+
+### Why not a plain destination conversion on `/thank-you`
+
+A destination conversion counts every arrival at the URL, including a refresh, a back-button return and a link someone shared. The tag is gated on a one-time token written at submit time instead, so it reports once per real lead and reports nothing at all for a visit with no submission behind it. Two separate submissions in one session still count as two.
+
+Still exclude `/thank-you` from GA4 landing-page reports - it is `noindex, nofollow`, but direct hits would otherwise show up as sessions.
 
 Still to add: a call-tracking number that swaps in for paid sessions, and a booking/CRM push from the form. The form currently emails the office via `/api/enquiry`.
 
