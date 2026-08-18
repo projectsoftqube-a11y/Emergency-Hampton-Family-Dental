@@ -45,6 +45,26 @@ const inter = Inter({
  */
 const GTM_ID = "GTM-WLNN5FJV";
 
+/**
+ * Google tag (gtag.js).
+ *
+ * GA4 property + the Google Ads account that runs this campaign. Both are
+ * `config`d on the one gtag.js load - that is how Google's own instructions
+ * say to handle a second product sharing an existing global site tag.
+ *
+ * The Ads conversion itself fires from /thank-you (see ThankYou.tsx), not
+ * here: `config` only identifies the account, it does not count a lead.
+ *
+ * NOTE FOR WHOEVER CONFIGURES GTM: the Google Ads conversion for
+ * AW-18372303940 is now hardcoded on the thank-you page. Do NOT also add a
+ * Google Ads Conversion Tracking tag for that same conversion label inside
+ * GTM-WLNN5FJV - it would fire twice and inflate the campaign's conversion
+ * count. GTM should handle GA4 events, call/text click tracking and any other
+ * conversion actions instead.
+ */
+const GA4_ID = "G-1KLWZ2499J";
+const GOOGLE_ADS_ID = "AW-18372303940";
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://hamptonfamilydentist.com"
@@ -70,6 +90,31 @@ export default function RootLayout({
       */}
       <Script id="gtm-base" strategy="afterInteractive">
         {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_ID}');`}
+      </Script>
+
+      {/*
+        Google tag (gtag.js) - GA4 + Google Ads.
+
+        Two <Script>s to mirror Google's snippet exactly: the library loads
+        async from googletagmanager.com, then the inline block defines gtag()
+        and configures both products. `afterInteractive` on both keeps the
+        order (Next runs same-strategy scripts in document order) without
+        blocking first paint.
+
+        gtag() shares the same `dataLayer` array GTM uses - that is by design
+        and is how Google intends the two to coexist.
+      */}
+      <Script
+        id="gtag-lib"
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+      />
+      <Script id="gtag-config" strategy="afterInteractive">
+        {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA4_ID}');
+gtag('config', '${GOOGLE_ADS_ID}');`}
       </Script>
       {/* No site header or footer by design - this is a paid-traffic landing
           page. Every outbound nav link is an exit path. The page supplies its

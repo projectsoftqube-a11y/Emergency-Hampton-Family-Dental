@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import AdsConversion from "@/components/AdsConversion";
 import LpHeader from "@/components/LpHeader";
 import LpFooter from "@/components/LpFooter";
 import StickyCallBar from "@/components/StickyCallBar";
@@ -26,6 +27,11 @@ export const metadata: Metadata = {
 export default function ThankYouPage() {
   return (
     <>
+      {/* Fires the Google Ads "Submit lead form" conversion on arrival. Renders
+          nothing - see the component for why this is a mount effect rather
+          than the inline <head> snippet Google's instructions describe. */}
+      <AdsConversion sendTo="AW-18372303940/OlxtCI_e4OMcEMS4zLhE" />
+
       {/* Same bottom padding as the landing page - reserves room for the mobile
           sticky call bar so it never covers the footer. */}
       <main className="w-full overflow-x-hidden bg-white pb-[58px] md:pb-0">
