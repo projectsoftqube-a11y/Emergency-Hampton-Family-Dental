@@ -145,16 +145,57 @@ Same brand *colours* as the main site: petrol `#1E6076`, deep petrol `#143C50`, 
 - [ ] **`NEXT_PUBLIC_SITE_URL`** - set to the real campaign URL, or canonical tags and JSON-LD point at the wrong domain
 - [ ] **$59 price** - confirm with the office; it appears in the hero, the offer band, and the FAQ
 - [ ] **Google rating and review count** - the page shows 4.9★; `aggregateRating` is **deliberately absent from the JSON-LD** until the count is verified, because an unverifiable rating in structured data risks a manual action
-- [ ] **Five review quotes** - replace with real Google reviews and real reviewer names
-- [ ] **Dentist bios and photos** - see IMAGE-PROMPTS.md §3–4
-- [ ] **Accepted insurance carriers** - confirm the list, then swap the six placeholder tiles for real logos
-- [ ] **Membership plan price** - `$[X]/month` is still a placeholder in the financing section
-- [ ] **Wednesday and Fri–Sun hours** - those days are omitted from `openingHoursSpecification` rather than guessed
-- [ ] **First-aid wording** - needs clinician review. This is YMYL health content; add a named reviewer and review date to the page
-- [ ] **Before/after photos** - signed HIPAA release on file, or delete `<BeforeAfter />` from `page.tsx`
+- [ ] **Photograph quality** - the current files are over-compressed and look soft. See **Image quality** below; this needs new source files, not a code change
+- [ ] **Dr. Dudhat portrait** - showing a generic outline avatar until the office supplies a photo
+- [ ] **Membership plan price** - confirm before quoting a figure anywhere
+- [ ] **First-aid wording** - if the section is ever restored it needs clinician review (YMYL health content: named reviewer + review date)
 - [ ] **Conversion tracking** - see below
 - [ ] **SMTP credentials** in `.env.local` on the host
 - [ ] Set both flags to `false`
+
+---
+
+## Image quality
+
+**The photographs are over-compressed at source.** This is the cause of the "images look blurry" feedback, and no code change can fully fix it - detail already discarded by the encoder cannot be recovered.
+
+Measured in bits per pixel (bpp); a photograph normally wants **0.6–1.5 bpp**:
+
+| File | Pixels | Size | bpp | |
+|---|---|---|---|---|
+| `process-reception.webp` | 1163×1353 | 61KB | **0.32** | over-compressed |
+| `symptoms/knocked-out.webp` | 600×600 | 12KB | **0.28** | over-compressed |
+| `hero-emergency.webp` | 1672×941 | 68KB | **0.35** | too low |
+| `symptoms/chipped.webp` | 600×600 | 18KB | 0.40 | too low |
+| `symptoms/toothache.webp` | 600×600 | 19KB | 0.44 | too low |
+| `symptoms/lost-filling.webp` | 600×600 | 21KB | 0.47 | too low |
+| `dr-jeffrey-brenner-v2.webp` | 900×1100 | 61KB | 0.50 | too low |
+| `hero-pain-mobile.webp` | 1200×900 | 83KB | 0.63 | ok |
+| `office-exterior.webp` | 1600×900 | 143KB | 0.82 | ok |
+
+`hero-emergency.webp` has a second problem: at 1672px wide it is **narrower than the viewport it fills**. It is a full-bleed `sizes="100vw"` background, so on any display wider than ~1672px the browser upscales it - blurry by definition, whatever the quality setting.
+
+### What to supply
+
+Re-export from the originals at **WebP quality 82–88** (or PNG/JPEG q90+ and let `next/image` handle the rest). Do not re-encode the current files - that compounds the loss.
+
+| Image | Minimum width | Target size |
+|---|---|---|
+| `hero-emergency.webp` | **2400px** (currently 1672) | 250–400KB |
+| `hero-pain-mobile.webp` | 1200px | 120–200KB |
+| `process-reception.webp` | 1200px | 150–250KB |
+| `office-exterior.webp` | 1600px | 150–250KB |
+| `dr-jeffrey-brenner-v2.webp` | 900px | 100–160KB |
+| `symptoms/*.webp` | 600px | 35–60KB each |
+
+Total page weight would rise by roughly 700KB–1MB. That is a real trade-off on mobile data, but these are the images carrying the practice's credibility.
+
+### What the code already does
+
+- `next/image` serves AVIF/WebP, sized per breakpoint, so no visitor downloads more than their viewport needs
+- **Quality 90** is the default in `ImageSlot` (was 75). At q75 the optimiser was applying a *second* lossy pass over already-degraded sources and compounding the artefacts - that part was ours, and it is fixed
+- Insurance logos render at **q95**: flat colour and hard letterform edges are what lossy compression handles worst
+- `sizes` is declared per image so the browser picks the right candidate; the dentist avatars deliberately over-declare (see `MeetTheDentists.tsx`) to force an oversampled fetch
 
 ---
 

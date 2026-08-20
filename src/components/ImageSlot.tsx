@@ -40,9 +40,17 @@ export type ImageSlotProps = {
   sizes?: string;
   objectPosition?: string;
   /**
-   * next/image defaults to 75. Worth raising for small images of faces, where
-   * the encoder has few pixels to work with and compression artefacts land
-   * directly on the features people actually look at.
+   * Defaults to 90, not next/image's 75.
+   *
+   * The source photographs are already compressed hard (see next.config.ts),
+   * so a q75 re-encode is a second lossy pass over an image that has little
+   * detail left to lose - which is exactly what makes them read as soft. At
+   * q90 the optimiser preserves what the source still has instead of
+   * compounding the loss. The cost is a few KB per image on a page that
+   * carries about a dozen.
+   *
+   * Pass a lower number explicitly for anything where size matters more than
+   * fidelity.
    */
   quality?: number;
 };
@@ -60,7 +68,7 @@ export default function ImageSlot({
   priority = false,
   sizes = "(max-width: 768px) 100vw, 50vw",
   objectPosition = "center",
-  quality,
+  quality = 90,
 }: ImageSlotProps) {
   if (src) {
     return (

@@ -110,6 +110,10 @@ export default function SymptomTriage({
                       // Two-up below 640px now, so each card is ~50vw there
                       // too - the old 100vw fetched images twice the size needed.
                       sizes="(max-width: 1024px) 50vw, 33vw"
+                      // Sources are only 600x600 and already compressed, and
+                      // the card scales them 1.06x on hover - a q75 re-encode
+                      // on top of that is what makes these read as soft.
+                      quality={90}
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                     />
                   ) : (

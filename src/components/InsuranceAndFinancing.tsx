@@ -117,6 +117,10 @@ export default function InsuranceAndFinancing({
                       }
                       width={240}
                       height={80}
+                      // Logos are flat colour and hard edges - exactly what
+                      // lossy compression handles worst. Ringing around
+                      // letterforms is very visible at this size.
+                      quality={95}
                       className="max-h-6 w-auto max-w-full object-contain sm:max-h-7"
                     />
                   ) : (
