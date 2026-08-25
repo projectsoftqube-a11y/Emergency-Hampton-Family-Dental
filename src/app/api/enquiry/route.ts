@@ -167,22 +167,96 @@ export async function POST(request: NextRequest) {
       </table>
     </div>`;
 
+  /*
+    Deliver to the office and to the backup mailbox as two independent sends.
+
+    Not a Bcc: with a Bcc a single hard bounce or a rejected recipient can fail
+    the whole message, so the copy meant to protect the lead would be the thing
+    that loses it. allSettled runs both and lets each fail on its own.
+
+    The submission is treated as successful if EITHER lands. These are patients
+    in pain - showing an error to someone whose details did reach the backup
+    inbox would push them to give up on a lead the practice can still act on.
+  */
+  const subject = `${formType}${name ? ` - ${name}` : ""}`;
+  const message = {
+    from: `"${mailConfig.fromName}" <${mailConfig.from}>`,
+    replyTo: email || undefined,
+    text: textBody,
+    html: htmlBody,
+  };
+
+  /*
+    Log lines carry NO patient data.
+
+    Vercel logs are visible to everyone with project access, including the
+    agency - a wider audience than the mailbox itself. A failure line only
+    needs to say that a lead was lost and why; the contents live in the SMTP
+    provider's logs, which are privileged access already.
+
+    `reason` is reduced to the error message. Nodemailer rejections can carry
+    the envelope (recipient, headers) on the error object, so the whole thing
+    must never be stringified into a log.
+  */
+  const reasonOf = (r: PromiseSettledResult<unknown>) =>
+    r.status === "rejected"
+      ? (r.reason instanceof Error ? r.reason.message : String(r.reason)).slice(0, 200)
+      : "ok";
+
+  const failLine = (primary: string, backup: string) =>
+    `LEAD_UNDELIVERED formType=${formType} timestamp=${new Date().toISOString()} error=${primary}|${backup}`;
+
+  let transport;
   try {
-    const transport = getTransport();
-    await transport.sendMail({
-      from: `"${mailConfig.fromName}" <${mailConfig.from}>`,
-      to: mailConfig.to,
-      replyTo: email || undefined,
-      subject: `${formType}${name ? ` - ${name}` : ""}`,
-      text: textBody,
-      html: htmlBody,
-    });
-    return NextResponse.json({ ok: true });
+    transport = getTransport();
   } catch (err) {
-    console.error("Enquiry email failed:", err);
+    // SMTP is not configured at all - nothing can be delivered.
+    const reason = (err instanceof Error ? err.message : String(err)).slice(0, 200);
+    console.error(failLine(reason, reason));
     return NextResponse.json(
       { error: "Could not send your message. Please call us or try again later." },
       { status: 500 }
     );
   }
+
+  /*
+    Two independent sends.
+
+    `backupTo` is normally the SAME mailbox as `to` - patient data must not
+    route to an agency inbox - so these are deliberately NOT deduplicated. Two
+    separate SMTP transactions still protect against the per-message failures
+    that actually lose leads: a silent bounce, a transient 4xx, a filter drop.
+
+    The backup copy is subject-prefixed so the two are distinguishable in an
+    inbox where they would otherwise look identical.
+  */
+  const sends: { label: string; to: string; subject: string }[] = [
+    { label: "primary", to: mailConfig.to, subject },
+    { label: "backup", to: mailConfig.backupTo, subject: `[BACKUP] ${subject}` },
+  ].filter((s) => Boolean(s.to));
+
+  const results = await Promise.allSettled(
+    sends.map((s) => transport.sendMail({ ...message, to: s.to, subject: s.subject }))
+  );
+
+  const delivered = results.some((r) => r.status === "fulfilled");
+
+  if (!delivered) {
+    const byLabel = Object.fromEntries(sends.map((s, i) => [s.label, reasonOf(results[i])]));
+    console.error(failLine(byLabel.primary ?? "not-attempted", byLabel.backup ?? "not-attempted"));
+    return NextResponse.json(
+      { error: "Could not send your message. Please call us or try again later." },
+      { status: 500 }
+    );
+  }
+
+  // Partial failure still delivered the lead, but the office should know one
+  // route is broken before the other one also fails.
+  results.forEach((r, i) => {
+    if (r.status === "rejected") {
+      console.warn(`LEAD_PARTIAL_FAILURE route=${sends[i].label} error=${reasonOf(r)}`);
+    }
+  });
+
+  return NextResponse.json({ ok: true });
 }

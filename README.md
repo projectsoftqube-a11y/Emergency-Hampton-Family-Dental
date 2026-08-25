@@ -224,28 +224,56 @@ Every CTA carries a `data-cta` attribute, so GTM needs one trigger rather than f
 
 ### What is installed
 
-Three things ship in the page itself:
+**GTM container `GTM-WLNN5FJV` is the only tracking script on this site** - loader in `layout.tsx`, `<noscript>` iframe first inside `<body>`.
 
-1. **GTM container `GTM-WLNN5FJV`** - loader in `layout.tsx`, `<noscript>` iframe first inside `<body>`.
-2. **Google tag (gtag.js)** - GA4 `G-1KLWZ2499J` and Google Ads `AW-18372303940`, both `config`d on one load, on every page.
-3. **Ads lead conversion** `AW-18372303940/OlxtCI_e4OMcEMS4zLhE` - fired from `/thank-you` by `AdsConversion.tsx`.
+There is deliberately **no gtag.js and no hardcoded conversion pixel**. Both existed previously and were removed: a conversion configured in two places counts one lead twice, inflating the conversion total and halving the reported cost per lead - the number the campaign is judged on.
+
+Everything is configured **inside the container**:
+
+| What | How |
+|---|---|
+| GA4 `G-1KLWZ2499J` | Google Tag, Initialization - All Pages |
+| Lead conversion | GTM sends a `generate_lead` GA4 event on `form_submit_success`; GA4 forwards it to Google Ads as an imported conversion |
+| Call / text clicks | Click trigger on `[data-cta]` |
+
+> **Do not add a Google Ads Conversion Tracking tag to the container.** The lead path is GTM → GA4 → Ads import, configured on the Ads side. A separate Ads tag would count every lead twice.
 
 ### The lead signal
 
-A lead is a **successful** submit: validation passed *and* `/api/enquiry` accepted it. At that moment `LeadForm` does two things - pushes `form_submit_success` onto the `dataLayer` (for GTM) and arms a one-time sessionStorage token (for the conversion tag on `/thank-you`).
+A lead is a **successful** submit: client validation passed *and* `/api/enquiry` returned ok. At that point `LeadForm` pushes:
 
-Use **either** path for the Ads conversion, not both:
+```js
+{
+  event: "form_submit_success",
+  form_name: "emergency_appointment_request",
+  page_type: "lp_emergency",
+  source_domain: "emergency.hamptonfamilydentist.com"
+}
+```
 
-| Path | Trigger |
-|---|---|
-| Already in the page | `AdsConversion.tsx` on `/thank-you` - nothing to configure |
-| GTM | Google Ads Conversion Tracking tag, Custom Event trigger on `form_submit_success` |
+The push sits after every guard clause in the submit handler, so it cannot fire on a validation failure, a 400/429/500 from the API, a network error, or a honeypot-caught bot. It is not on the button click.
 
-If you configure the GTM tag as well, **gate it** so one lead cannot be counted twice - Custom JavaScript variable `function () { return !!window.__hfdAdsConversionFired; }` used as a blocking trigger. The page sets that flag the moment it reports the conversion, so whichever path runs first wins.
+No PII in the payload - name, phone and symptom stay out, because every tag in the container can read the dataLayer and this is health context.
 
-### Why not a plain destination conversion on `/thank-you`
+### Lead delivery and backup
 
-A destination conversion counts every arrival at the URL, including a refresh, a back-button return and a link someone shared. The tag is gated on a one-time token written at submit time instead, so it reports once per real lead and reports nothing at all for a visit with no submission behind it. Two separate submissions in one session still count as two.
+Every submission is sent as **two independent messages** - to `ENQUIRY_TO` and to `BACKUP_ENQUIRY_TO`, the second subject-prefixed `[BACKUP]` so the copies are distinguishable in the inbox.
+
+Both currently point at the **same client-owned mailbox** (`info@hamptonfamilydentist.com`), and that is deliberate: patient contact details must not route to an agency inbox. The sends are separate SMTP transactions and are **not deduplicated**, so two attempts still protect against the per-message failures that actually lose leads - a silent bounce, a transient 4xx, a spam-filter drop.
+
+Not a Bcc: a single rejected recipient can fail the whole message, so the copy meant to protect the lead would be the thing that loses it.
+
+The form reports success if **either** delivers. Swap `BACKUP_ENQUIRY_TO` to a second client-owned address (`angela@`, `frontdesk@`) as soon as one exists - two mailboxes beat two attempts at one. No code change needed.
+
+**Logs carry no patient data.** Vercel logs are visible to everyone with project access, a wider audience than the mailbox. A total failure logs only:
+
+```
+LEAD_UNDELIVERED formType=<x> timestamp=<iso> error=<primary>|<backup>
+```
+
+No name, phone, symptom or email. If a lead needs recovering, this line says a failure happened and when; the contents live in the SMTP provider's logs, which are privileged-access already. A partial failure (one route delivered) logs `LEAD_PARTIAL_FAILURE route=<primary|backup> error=<msg>` so a half-broken pipeline is visible before the other half fails too.
+
+**Still to do:** durable storage (Vercel KV or Supabase) logging every submission with `email_send_status`, so a total SMTP outage loses nothing at all - backup email is the interim measure. An SMS alert to the front desk (Twilio) is also worth adding for this page specifically.
 
 Still exclude `/thank-you` from GA4 landing-page reports - it is `noindex, nofollow`, but direct hits would otherwise show up as sessions.
 

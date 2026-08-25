@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { AlertCircle, ArrowRight, Loader2 } from "lucide-react";
 import { sendEnquiry } from "@/lib/sendEnquiry";
-import { markConversionPending, rememberFirstName } from "@/lib/leadStore";
+import { rememberFirstName } from "@/lib/leadStore";
 import { isValid, validateName, validatePhone } from "@/lib/validation";
 import { PHONE_DISPLAY, PHONE_TEL, SHOW_REVIEW_NOTES } from "@/lib/lp.config";
 
@@ -122,32 +122,30 @@ export default function LeadForm({ compact = false }: { compact?: boolean }) {
      * to tap twice and file two leads.
      */
     /*
-      GTM conversion signal. Deliberately here and not on the button's click
-      handler: this line is only reached once validation has passed AND the
-      backend has accepted the enquiry, so the event counts real leads rather
-      than submit attempts, bot hits and validation failures.
+      The single conversion signal for this site. GTM listens for
+      `form_submit_success` and fires the Google Ads conversion and any GA4
+      event from there - nothing is hardcoded in the page.
 
-      Pushed before the router.push so the event is on the dataLayer while this
-      page is still mounted - GTM then has a full tick to read it.
+      Placement matters: this line is only reachable once validation has passed
+      AND /api/enquiry returned ok. A failed submit returns above, so a network
+      error, a validation rejection or a honeypot bot never reaches it. It is
+      not on the button's click handler for the same reason.
 
-      No PII in the payload. Name, phone and symptom stay out of it: the
-      dataLayer is readable by every tag in the container, and this is health
-      context.
+      Pushed before router.push so the event lands while this page is still
+      mounted, giving GTM a full tick to read it.
+
+      No PII in the payload. Name, phone and symptom stay out: the dataLayer is
+      readable by every tag in the container, and this is health context.
     */
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "form_submit_success",
-      form_name: "appointment_request",
-      page_type: "emergency",
-    });
-
-    /*
-      Arms the Google Ads conversion for /thank-you. Written here - after the
-      backend accepted - so the tag on the confirmation page fires for real
-      leads only, and exactly once: a refresh, a back-button return or a direct
-      visit to /thank-you finds no token and reports nothing.
-    */
-    markConversionPending();
+    if (typeof window !== "undefined") {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "form_submit_success",
+        form_name: "emergency_appointment_request",
+        page_type: "lp_emergency",
+        source_domain: "emergency.hamptonfamilydentist.com",
+      });
+    }
 
     rememberFirstName(values.name);
     router.push(THANK_YOU_PATH);
