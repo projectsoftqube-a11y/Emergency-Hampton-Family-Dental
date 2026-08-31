@@ -22,18 +22,13 @@ const DENTISTS = [
   {
     name: "Dr. Keyur Dudhat",
     bio: "Gentle, patient-first care for emergencies and everyday dentistry.",
-    file: "lp/dentist-placeholder.svg",
-    /*
-      Generic outline avatar at the office's request - they have not signed off
-      a portrait for Dr. Dudhat yet. Swap `src` back to a real photo (and drop
-      the objectPosition override below, which only exists to centre the
-      drawing) once one is supplied.
-    */
-    src: "/images/lp/dentist-placeholder.svg",
+    file: "lp/dr-keyur-dudhat.webp",
+    src: "/images/lp/dr-keyur-dudhat.webp",
     alt: "Dr. Keyur Dudhat, emergency and general dentist at Hampton Family Dental in Southampton, PA",
+    // Real photo, supplied by the practice.
     standIn: false,
-    // The drawing is already centred in its own square - no crop needed.
-    objectPosition: "center",
+    // Real portraits sit high in frame, so the crop pulls up towards the face.
+    objectPosition: "center 20%",
   },
 ];
 
@@ -109,9 +104,9 @@ export default function MeetTheDentists() {
       </div>
 
       <ReviewNote>
-        [CONFIRM] Dentist bios with the office. Dr. Brenner&apos;s portrait is the
-        real one from the main site; Dr. Dudhat is showing a generic outline
-        avatar until the office supplies a photo.
+        [CONFIRM] Dentist bios with the office. Both portraits are real photos -
+        Dr. Brenner&apos;s from the main site, Dr. Dudhat&apos;s supplied by the
+        practice.
       </ReviewNote>
     </Section>
   );

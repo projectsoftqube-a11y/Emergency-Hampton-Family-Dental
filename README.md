@@ -136,7 +136,7 @@ Same brand *colours* as the main site: petrol `#1E6076`, deep petrol `#143C50`, 
 | `SHOW_REVIEW_NOTES` | `true` | Renders the `[CONFIRM]` / `[DEV]` annotations from the review draft as amber notes. Set `false`, or `NEXT_PUBLIC_LP_REVIEW_NOTES=false`, before paid traffic. |
 | `SHOW_IMAGE_SLOT_LABELS` | `true` | Shows filename/dimension labels on any *unfilled* image slots. All real slots now have images, so this only affects the insurance-logo fallbacks; safe to leave on or set `false`. |
 
-**Images are in.** Hero, reception, office exterior, both dentist portraits, and the before/after pair are all populated in `public/images/lp/`. Two carry visible caveats until you act on them: Dr. Brenner's portrait is a flagged **stand-in** (swap for a real photo), and the before/after pair is labelled **"Illustrative example - not an actual patient"** (swap for a real consented case to drop the label). Insurance carriers render as text unless you drop logo files into `public/images/lp/insurance/` - see IMAGE-PROMPTS.md §8.
+**Images are in.** Hero, reception, office exterior, both dentist portraits, and the before/after pair are all populated in `public/images/lp/`. Both dentist portraits are real photos supplied by the practice. One caveat remains until you act on it: the before/after pair is labelled **"Illustrative example - not an actual patient"** (swap for a real consented case to drop the label). Insurance carriers render as text unless you drop logo files into `public/images/lp/insurance/` - see IMAGE-PROMPTS.md §8.
 
 ---
 
@@ -146,7 +146,6 @@ Same brand *colours* as the main site: petrol `#1E6076`, deep petrol `#143C50`, 
 - [ ] **$59 price** - confirm with the office; it appears in the hero, the offer band, and the FAQ
 - [ ] **Google rating and review count** - the page shows 4.9★; `aggregateRating` is **deliberately absent from the JSON-LD** until the count is verified, because an unverifiable rating in structured data risks a manual action
 - [ ] **Photograph quality** - the current files are over-compressed and look soft. See **Image quality** below; this needs new source files, not a code change
-- [ ] **Dr. Dudhat portrait** - showing a generic outline avatar until the office supplies a photo
 - [ ] **Membership plan price** - confirm before quoting a figure anywhere
 - [ ] **First-aid wording** - if the section is ever restored it needs clinician review (YMYL health content: named reviewer + review date)
 - [ ] **Conversion tracking** - see below
