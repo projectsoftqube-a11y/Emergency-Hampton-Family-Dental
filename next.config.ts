@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Serve /public images as they are: Vercel image optimisation is a paid allowance on the Hobby plan
+    // and answers 402 once it is used up, which leaves every next/image blank.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     /**
      * Next 16 only serves qualities listed here — the default is [75], and a
